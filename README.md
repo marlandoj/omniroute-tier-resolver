@@ -40,7 +40,7 @@ Use it to make intelligent routing decisions before sending tasks to OmniRoute, 
 ### Prerequisites
 
 - **Zo Computer** with workspace access
-- **OmniRoute** installed and running at `http://localhost:20128`
+- **[OmniRoute](https://github.com/diegosouzapw/OmniRoute)** installed and running at `http://localhost:20128`
 - **At least one combo** created in OmniRoute (e.g., `light`, `mid`, `heavy`)
 
 ### Installation
@@ -425,6 +425,13 @@ bun run dev
 - Review OmniRoute logs for authentication errors
 
 ---
+
+## Credits
+
+Built for [OmniRoute](https://github.com/diegosouzapw/OmniRoute) by [@marlandoj](https://github.com/marlandoj) — an intelligent model routing layer for 430+ models with best-combo-for-task selection.
+
+---
+
 
 ## Support & Contribution
 
