@@ -426,6 +426,12 @@ bun run dev
 
 ---
 
+## Credits
+
+Built for [OmniRoute](https://github.com/marlandoj/OmniRoute) by [@marlandoj](https://github.com/marlandoj) — an intelligent model routing layer for 430+ models with best-combo-for-task selection.
+
+---
+
 ## Support & Contribution
 
 **Issues or questions?**
