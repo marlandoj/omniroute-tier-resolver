@@ -47,17 +47,17 @@ export interface OmniRouteRecommendation {
 }
 
 export const TIER_TO_COMBO: Record<ComplexityTier, string> = {
-  trivial: "swarm-light",
-  simple: "swarm-light",
-  moderate: "swarm-mid",
-  complex: "swarm-heavy",
+  trivial: "light",
+  simple: "light",
+  moderate: "mid",
+  complex: "heavy",
 };
 
-const TIER_ALLOWED_COMBOS: Record<ComplexityTier, string[]> = {
-  trivial: ["swarm-light"],
-  simple: ["swarm-light", "swarm-mid"],
-  moderate: ["swarm-light", "swarm-mid", "swarm-heavy"],
-  complex: ["swarm-light", "swarm-mid", "swarm-heavy", "swarm-failover"],
+export const TIER_CANDIDATES: Record<ComplexityTier, string[]> = {
+  trivial: ["light"],
+  simple: ["light", "mid"],
+  moderate: ["light", "mid", "heavy"],
+  complex: ["light", "mid", "heavy", "failover"],
 };
 
 const TASK_FITNESS: Record<TaskType, { preferred: string[]; traits: string[] }> = {
@@ -150,7 +150,7 @@ export function bestComboForTask(
 ): OmniRouteRecommendation {
   const fitness = TASK_FITNESS[taskType] || TASK_FITNESS.general;
   const enabled = combos.filter((c) => c.enabled !== false);
-  const allowedNames = TIER_ALLOWED_COMBOS[complexityTier];
+  const allowedNames = TIER_CANDIDATES[complexityTier];
 
   const tierFiltered = enabled.filter((c) => {
     const name = (c.name ?? "").toLowerCase();
@@ -242,7 +242,7 @@ Usage:
   bun tier-resolve.ts --file /path/to/prompt.txt
 
 Modes:
-  (default)     Output the static tier-to-combo mapping (swarm-light/mid/heavy)
+  (default)     Output the static tier-to-combo mapping (light/mid/heavy)
   --json        Output full JSON: tier, combo, score, signals, inferredTaskType
   --omniroute   Query OmniRoute's best_combo_for_task (live combo recommendation)
                 Falls back to static mapping if OmniRoute is unreachable
@@ -255,10 +255,10 @@ Options:
   -h, --help         Show this help
 
 Static tier → combo mapping:
-  trivial  → swarm-light
-  simple   → swarm-light
-  moderate → swarm-mid
-  complex  → swarm-heavy
+  trivial  → light
+  simple   → light
+  moderate → mid
+  complex  → heavy
 
 Task type inference:
   The prompt text is scanned for keywords to infer taskType:
@@ -283,10 +283,10 @@ Environment:
 
 Examples:
   bun tier-resolve.ts "fix the typo in README.md"
-  # → swarm-light
+  # → light
 
   bun tier-resolve.ts --json "analyse the codebase and run git diff"
-  # → {"tier":"moderate","combo":"swarm-mid","score":3,...,"inferredTaskType":"analysis"}
+  # → {"tier":"moderate","combo":"mid","score":3,...,"inferredTaskType":"analysis"}
 
   bun tier-resolve.ts --omniroute "review the PR and check for security issues"
   # → {"complexity":{"tier":"simple",...},"omniroute":{"recommendedCombo":{...},...}}

@@ -25,7 +25,7 @@ Use it to make intelligent routing decisions before sending tasks to OmniRoute, 
 
 - **Zo Computer** with workspace access
 - **OmniRoute** installed and running at `http://localhost:20128`
-- **At least one combo** created in OmniRoute (e.g., `swarm-light`, `swarm-mid`, `swarm-heavy`)
+- **At least one combo** created in OmniRoute (e.g., `light`, `mid`, `heavy`)
 
 ### Installation
 
@@ -69,7 +69,7 @@ cd /home/workspace/Skills/omniroute-tier-resolver/scripts
 
 # Simple output (just the combo name)
 bun tier-resolve.ts "Write a function to parse JSON"
-# Output: swarm-light
+# Output: light
 
 # Full JSON output with diagnostics
 bun tier-resolve.ts --omniroute "Implement OAuth2 authentication with JWT tokens, refresh rotation, and rate limiting"
@@ -97,11 +97,11 @@ bun tier-resolve.ts --omniroute "<your task prompt>"
 ```bash
 # Simple task → lightweight combo
 bun tier-resolve.ts "Fix a typo in the README"
-# Output: swarm-light
+# Output: light
 
 # Complex task → heavyweight combo
 bun tier-resolve.ts "Design and implement a distributed caching system with Redis, handle failover, write tests, and create monitoring dashboards"
-# Output: swarm-heavy
+# Output: heavy
 
 # Full diagnostic output
 bun tier-resolve.ts --omniroute "Refactor authentication module"
@@ -134,7 +134,7 @@ const taskPrompt = "Analyze performance metrics from last week";
 // Get recommended combo
 const result = await Bun.$`bun Skills/omniroute-tier-resolver/scripts/tier-resolve.ts --omniroute ${taskPrompt}`.json();
 
-const comboName = result.resolvedCombo;         // e.g., "swarm-mid"
+const comboName = result.resolvedCombo;         // e.g., "mid"
 const reasoning = result.omniroute?.reasoning;  // Why this combo was chosen
 const alternatives = result.omniroute?.alternatives; // Other viable options
 
@@ -162,7 +162,7 @@ console.log(data.choices[0].message.content);
 ### Simple Mode (default)
 
 ```
-swarm-mid
+light
 ```
 
 Just the recommended combo name, suitable for direct use in scripts.
@@ -182,16 +182,16 @@ Just the recommended combo name, suitable for direct use in scripts.
       "hasAnalysis": false
     },
     "inferredTaskType": "coding",
-    "staticCombo": "swarm-mid"
+    "staticCombo": "mid"
   },
   "omniroute": {
-    "selectedCombo": "swarm-mid",
-    "alternatives": ["swarm-light", "swarm-heavy"],
+    "selectedCombo": "mid",
+    "alternatives": ["light", "heavy"],
     "reasoning": "Best balance of capability and cost for moderate complexity coding task",
     "models": ["anthropic/claude-3.5-sonnet", "openai/gpt-4"],
     "estimatedCost": 0.0042
   },
-  "resolvedCombo": "swarm-mid"
+  "resolvedCombo": "mid"
 }
 ```
 
@@ -212,9 +212,9 @@ The tier resolver uses a multi-signal heuristic to estimate task complexity:
 | **Analysis Required** | 0.15 | Keywords: "analyze", "investigate", "compare", etc. |
 
 **Complexity tiers:**
-- **Trivial** (< 0.3): Single-step, simple tasks → `swarm-light`
-- **Moderate** (0.3-0.7): Multi-step, moderate complexity → `swarm-mid`
-- **Complex** (> 0.7): Multi-file, analytical, complex → `swarm-heavy`
+- **Trivial** (< 0.3): Single-step, simple tasks → `light`
+- **Moderate** (0.3-0.7): Multi-step, moderate complexity → `mid`
+- **Complex** (> 0.7): Multi-file, analytical, complex → `heavy`
 
 **Task type inference** helps match tasks to combo capabilities:
 - `coding` — Implementation, refactoring, debugging
@@ -310,7 +310,7 @@ bun run dev
 **Fix:**
 1. Open OmniRoute web UI: `http://localhost:20128`
 2. Navigate to the Combos tab
-3. Create at least one combo (e.g., `swarm-light`, `swarm-mid`, `swarm-heavy`)
+3. Create at least one combo (e.g., `light`, `mid`, `heavy`)
 
 ### Using static fallback
 
