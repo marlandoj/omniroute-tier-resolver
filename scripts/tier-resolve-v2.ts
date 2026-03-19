@@ -158,15 +158,15 @@ const WEIGHTS_FILE = resolve(DATA_DIR, "weights.json");
 // ============================================================================
 
 const TASK_TYPE_KEYWORDS: Record<TaskType, string[]> = {
-  debugging: ["debug", "fix", "bug", "error", "crash", "broken", "stacktrace", "exception", "fail", "failure", "issue", "problem", "troubleshoot", "diagnose"],
-  analysis: ["analyze", "analyse", "assess", "evaluate", "audit", "investigate", "research", "compare", "examine", "inspect", "study", "explore"],
+  debugging: ["debug", "bug", "error", "crash", "broken", "stacktrace", "exception", "failure", "troubleshoot", "diagnose", "memory leak", "race condition", "deadlock"],
+  analysis: ["analyze", "analyse", "assess", "evaluate", "audit", "investigate", "research", "compare", "examine", "inspect", "study", "explore", "benchmark", "measure", "profile"],
   review: ["review", "pr", "pull request", "code review", "diff", "feedback", "critique", "assess code", "examine code"],
   planning: ["plan", "design", "architect", "roadmap", "strategy", "outline", "proposal", "rfc", "spec", "blueprint", "scheme"],
   documentation: ["document", "readme", "docs", "write up", "explain", "tutorial", "guide", "manual", "howto", "walkthrough"],
   coding: ["implement", "build", "create", "write", "code", "develop", "add", "refactor", "migrate", "deploy", "construct", "program"],
   data_science: ["model", "train", "dataset", "ml", "machine learning", "ai", "neural", "pandas", "numpy", "scikit", "tensorflow", "pytorch", "data analysis", "predict", "classification", "regression"],
   devops: ["deploy", "ci", "cd", "pipeline", "docker", "kubernetes", "k8s", "terraform", "ansible", "jenkins", "github actions", "infrastructure", "provision", "orchestrate"],
-  security: ["security", "vulnerability", "cve", "exploit", "penetration", "audit", "compliance", "encryption", "auth", "authorization", "authentication", "owasp", "xss", "sql injection"],
+  security: ["security", "vulnerability", "cve", "exploit", "penetration", "compliance", "gdpr", "hipaa", "pci", "sox", "encryption", "owasp", "xss", "sql injection", "gdpr compliance", "security audit", "penetration testing"],
   content: ["write", "blog", "article", "post", "copy", "content", "marketing", "seo", "draft", "compose"],
   general: [],
 };
@@ -248,13 +248,17 @@ async function loadWeights(): Promise<WeightConfig> {
     lastUpdated: Date.now(),
     feedbackCount: 0,
     weights: {
-      wordCount: 0.14,
-      fileRefs: 0.14,
-      multiStep: 0.14,
-      toolUsage: 0.14,
-      analysisDepth: 0.14,
-      domainComplexity: 0.15,
-      techStackDepth: 0.15,
+      wordCount: 0.04,
+      fileRefs: 0.02,
+      multiStep: 0.10,
+      toolUsage: 0.04,
+      analysisDepth: 0.08,
+      domainComplexity: 0.10,
+      techStackDepth: 0.10,
+      conceptCount: 0.20,
+      taskVerbComplexity: 0.10,
+      scopeBreadth: 0.12,
+      featureListCount: 0.20,
     },
     performance: {
       precision: { trivial: 0, simple: 0, moderate: 0, complex: 0 },
@@ -294,51 +298,96 @@ async function computeSignals(text: string, weights: WeightConfig): Promise<Comp
   const wordCount = words.length;
   const fileRefs = (lower.match(/\/[\w\-./ ]+\.\w+/g) || []).length;
   
-  // Multi-step detection with enhanced patterns (Bug #4 fix)
+  // Multi-step detection with enhanced patterns
   const stepMarkers = (lower.match(/\b(then|after|next|step \d+|finally|first|second|third|fourth|fifth)\b/g) || []).length;
   const numberedSteps = (lower.match(/\d+\.\s/g) || []).length;
-  const commaLists = (lower.match(/,\s+(?:and\s+)?[a-z]/g) || []).length;
-  const sentences = (lower.match(/\.\s+[A-Z]/g) || []).length;
-  const multiStepIntensity = stepMarkers + numberedSteps + Math.floor(commaLists / 2) + sentences;
+  // Better comma list detection — count items separated by commas/and
+  const commaItems = (lower.match(/,\s*(?:and\s+)?/g) || []).length;
+  const sentences = text.match(/\.\s+[A-Z]/g)?.length || 0;
+  const multiStepIntensity = stepMarkers + numberedSteps + commaItems + sentences;
   
   // Tool usage depth
-  const tools = lower.match(/\b(git|npm|bun|pip|curl|sed|grep|awk|mkdir|chmod|docker|kubectl|terraform|ansible)\b/g) || [];
+  const tools = lower.match(/\b(git|npm|bun|pip|curl|sed|grep|awk|mkdir|chmod|docker|kubectl|terraform|ansible|webpack|vite|jest|pytest|make|cmake)\b/g) || [];
   const toolUsageDepth = tools.length;
   
-  // Analysis depth
-  const analysisKeywords = lower.match(/\b(analy[zs]e|assess|evaluate|audit|investigate|research|compare|examine|inspect)\b/g) || [];
-  const analysisDepth = analysisKeywords ? analysisKeywords.length : 0;
+  // Analysis depth — expanded keyword set
+  const analysisKeywords = lower.match(/\b(analy[zs]e|assess|evaluate|audit|investigate|research|compare|examine|inspect|suggest|optimize|recommend|improve|bottleneck|performance|diagnose|troubleshoot|review|measure)\b/g) || [];
+  const analysisDepth = analysisKeywords.length;
   
+  // NEW: Concept count — distinct technical concepts/components mentioned
+  const conceptPatterns = lower.match(/\b(api|gateway|service|mesh|auth|authentication|authorization|oauth|jwt|token|database|cache|queue|worker|scheduler|load.?balancer|proxy|middleware|controller|model|view|schema|migration|endpoint|webhook|socket|websocket|stream|pipeline|microservice|monolith|container|cluster|node|pod|replica|deployment|ingress|certificate|ssl|tls|encryption|hashing|session|cookie|cors|csrf|rate.?limit|throttl|pagination|search|index|shard|backup|restore|monitor|alert|log|metric|trace|dashboard|chart|graph|notification|email|sms|push|cron|job|task|event|message|pub.?sub|kafka|rabbit|redis|memcache|cdn|dns|domain|route|network|firewall|vpc|subnet|security.?group|iam|role|policy|permission|mfa|2fa|totp|saml|sso|ldap|refresh|rotation|testing|unit.?test|integration.?test|e2e|ci|cd|pipeline|build|deploy|release|rollback|canary|blue.?green|feature.?flag|a.?b.?test|compliance|gdpr|hipaa|pci|workflow|codebase|real.?time|chat|presence|persistence|receipt|inventory|payment|order|admin|visualization|report|landing.?page|form|contact|navigation|prototype|poc|neural|dataset|training|inference|prometheus|grafana|terraform|helm|ingress|typescript|javascript|react|angular|vue|fastapi|django|flask|express)\b/g) || [];
+  const uniqueConcepts = new Set(conceptPatterns);
+  const conceptCount = uniqueConcepts.size;
+  
+  // NEW: Task verb complexity — count distinct action verbs
+  const actionVerbs = lower.match(/\b(implement|build|create|write|develop|design|architect|plan|deploy|test|debug|fix|refactor|migrate|optimize|analyze|review|audit|configure|setup|install|integrate|automate|monitor|scale|secure|document|benchmark|profile|validate|verify)\b/g) || [];
+  const uniqueVerbs = new Set(actionVerbs);
+  const taskVerbComplexity = uniqueVerbs.size;
+  
+  // NEW: Scope breadth — broad scope vs narrow scope
+  const broadScope = (lower.match(/\b(entire|full|comprehensive|all|system|platform|architecture|infrastructure|end.?to.?end|cross.?cutting|enterprise|organization|codebase|stack|ecosystem|framework|suite|pipeline|across|every|workflow)\b/g) || []).length;
+  const narrowScope = (lower.match(/\b(function|method|button|field|typo|variable|parameter|class|component|element|line|column|property|attribute|simple|single|one|quick|small|minor|tiny)\b/g) || []).length;
+  const scopeScore = Math.max(0, broadScope - narrowScope);
+
+  // NEW: Feature enumeration — count distinct deliverables in "X with A, B, C, and D" patterns
+  // This captures prompts that list multiple features/requirements
+  const commaAndItems = lower.split(/,\s*(?:and\s+)?|(?:\band\b)/).length;
+  const featureListCount = Math.max(0, commaAndItems - 1); // number of separators = items - 1
+
   return [
     {
       name: "wordCount",
       rawValue: wordCount,
-      normalizedScore: normalizeLinear(wordCount, 5, 80), // Bug #3 fix: adjusted from (10, 200)
-      weight: weights.weights.wordCount || 0.14,
+      normalizedScore: normalizeLinear(wordCount, 5, 80),
+      weight: weights.weights.wordCount || 0.05,
     },
     {
       name: "fileRefs",
       rawValue: fileRefs,
       normalizedScore: normalizeLog(fileRefs, 5),
-      weight: weights.weights.fileRefs || 0.14,
+      weight: weights.weights.fileRefs || 0.03,
     },
     {
       name: "multiStep",
       rawValue: multiStepIntensity,
-      normalizedScore: normalizeLog(multiStepIntensity, 5),
-      weight: weights.weights.multiStep || 0.14,
+      normalizedScore: normalizeLinear(multiStepIntensity, 0, 6),
+      weight: weights.weights.multiStep || 0.12,
     },
     {
       name: "toolUsage",
       rawValue: toolUsageDepth,
       normalizedScore: normalizeLog(toolUsageDepth, 5),
-      weight: weights.weights.toolUsage || 0.14,
+      weight: weights.weights.toolUsage || 0.05,
     },
     {
       name: "analysisDepth",
       rawValue: analysisDepth,
-      normalizedScore: normalizeLog(analysisDepth, 5),
-      weight: weights.weights.analysisDepth || 0.14,
+      normalizedScore: normalizeLinear(analysisDepth, 0, 3),
+      weight: weights.weights.analysisDepth || 0.10,
+    },
+    {
+      name: "conceptCount",
+      rawValue: conceptCount,
+      normalizedScore: normalizeLinear(conceptCount, 0, 6),
+      weight: weights.weights.conceptCount || 0.25,
+    },
+    {
+      name: "taskVerbComplexity",
+      rawValue: taskVerbComplexity,
+      normalizedScore: normalizeLinear(taskVerbComplexity, 0, 4),
+      weight: weights.weights.taskVerbComplexity || 0.20,
+    },
+    {
+      name: "scopeBreadth",
+      rawValue: scopeScore,
+      normalizedScore: normalizeLinear(scopeScore, 0, 3),
+      weight: weights.weights.scopeBreadth || 0.12,
+    },
+    {
+      name: "featureListCount",
+      rawValue: featureListCount,
+      normalizedScore: normalizeLinear(featureListCount, 0, 4),
+      weight: weights.weights.featureListCount || 0.20,
     },
   ];
 }
@@ -386,7 +435,7 @@ function detectDomainPattern(text: string, taskType: TaskType): DomainPattern | 
     complexityModifier *= 1.2;
   }
   if (detectedTech.includes("oauth") || detectedTech.includes("jwt") || detectedTech.includes("auth")) {
-    complexityModifier *= 1.2;
+    complexityModifier *= 1.1;
   }
   
   // Baseline complexity for non-trivial task types (even without tech stack)
@@ -447,10 +496,14 @@ function inferTaskTypeSemantic(text: string): SemanticMatch {
   for (const [taskType, keywords] of Object.entries(TASK_TYPE_KEYWORDS)) {
     if (taskType === "general") continue;
     
-    // Keyword matching
+    // Keyword matching — specialized types get a tiebreaker bonus when 2+ keywords match
     const keywordMatches = keywords.filter(kw => lower.includes(kw));
     if (keywordMatches.length > 0) {
-      const confidence = Math.min(1.0, keywordMatches.length * 0.3);
+      const SPECIALIZATION_BONUS: Partial<Record<string, number>> = {
+        security: 0.05, data_science: 0.05, devops: 0.05, analysis: 0.02, planning: 0.02,
+      };
+      const bonus = keywordMatches.length >= 2 ? (SPECIALIZATION_BONUS[taskType] || 0) : 0;
+      const confidence = Math.min(1.0, keywordMatches.length * 0.3 + bonus);
       if (confidence > bestMatch.confidence) {
         bestMatch = {
           taskType: taskType as TaskType,
@@ -573,19 +626,25 @@ function detectScopeModifier(text: string): ScopeModifier | null {
 // TIER CALCULATION
 // ============================================================================
 
-function calculateTier(signals: ComplexitySignal[], domainPattern: DomainPattern | null, constraints: ConstraintSpec[], scopeModifier: ScopeModifier | null): { tier: ComplexityTier; score: number } {
+function calculateTier(
+  signals: ComplexitySignal[],
+  domainPattern: DomainPattern | null,
+  constraints: ConstraintSpec[],
+  scopeModifier: ScopeModifier | null,
+  taskType: TaskType = "general",
+): { tier: ComplexityTier; score: number } {
   // Weighted sum of normalized signals
   let weightedScore = 0;
   for (const signal of signals) {
     weightedScore += signal.normalizedScore * signal.weight;
   }
-  
+
   // Apply domain complexity modifier (ADDITIVE, not multiplicative)
   if (domainPattern) {
     const domainAdjustment = (domainPattern.complexityModifier - 1.0) * 0.2; // Map 0.8-1.5 to -0.04 to +0.10
     weightedScore += domainAdjustment;
   }
-  
+
   // Apply scope modifier (ADDITIVE)
   if (scopeModifier) {
     if (scopeModifier === "quick") weightedScore -= 0.15; // Reduce complexity
@@ -593,7 +652,7 @@ function calculateTier(signals: ComplexitySignal[], domainPattern: DomainPattern
     if (scopeModifier === "experimental") weightedScore -= 0.10; // Slightly reduce
     if (scopeModifier === "production") weightedScore += 0.10; // Slightly increase
   }
-  
+
   // Apply constraint adjustments (ADDITIVE)
   for (const constraint of constraints) {
     if (constraint.type === "budget" && constraint.value === "low") {
@@ -606,17 +665,35 @@ function calculateTier(signals: ComplexitySignal[], domainPattern: DomainPattern
       weightedScore += 0.12; // Prefer heavier tier
     }
   }
-  
+
   // Clamp score to [0, 1]
   weightedScore = Math.max(0, Math.min(1, weightedScore));
-  
-  // Map to tier with adjusted thresholds
+
+  // Map to tier with calibrated thresholds
   let tier: ComplexityTier;
-  if (weightedScore < 0.20) tier = "trivial";      // Was 0.25
-  else if (weightedScore < 0.45) tier = "simple";   // Was 0.5
-  else if (weightedScore < 0.65) tier = "moderate"; // Was 0.75
+  if (weightedScore < 0.04) tier = "trivial";
+  else if (weightedScore < 0.15) tier = "simple";
+  else if (weightedScore < 0.45) tier = "moderate";
   else tier = "complex";
-  
+
+  // Task-type complexity floor: certain domains are inherently non-trivial
+  // These can be overridden by scope modifiers (quick/experimental → allow lower)
+  if (scopeModifier !== "quick" && scopeModifier !== "experimental") {
+    const TIER_ORDER: Record<ComplexityTier, number> = { trivial: 0, simple: 1, moderate: 2, complex: 3 };
+    const FLOOR_MAP: Partial<Record<TaskType, ComplexityTier>> = {
+      security: "moderate",
+      devops: "moderate",
+      data_science: "moderate",
+      debugging: "simple",
+      planning: "moderate",
+      analysis: "moderate",
+    };
+    const floor = FLOOR_MAP[taskType];
+    if (floor && TIER_ORDER[tier] < TIER_ORDER[floor]) {
+      tier = floor;
+    }
+  }
+
   return { tier, score: weightedScore };
 }
 
@@ -634,46 +711,130 @@ export async function estimateComplexity(
   }
 ): Promise<ComplexityEstimate> {
   const weights = await loadWeights();
-  const signals = await computeSignals(text, weights);
-  
+  return _estimateCore(text, weights, options);
+}
+
+// ============================================================================
+// SYNC API — for callers that can't use async (e.g., orchestrator routing)
+// Uses default weights (no disk read). If async estimateComplexity has been
+// called previously, uses the cached weights instead.
+// ============================================================================
+
+const DEFAULT_WEIGHTS: WeightConfig = {
+  version: 1,
+  lastUpdated: 0,
+  feedbackCount: 0,
+  weights: {
+    wordCount: 0.04,
+    fileRefs: 0.02,
+    multiStep: 0.10,
+    toolUsage: 0.04,
+    analysisDepth: 0.08,
+    domainComplexity: 0.10,
+    techStackDepth: 0.10,
+    conceptCount: 0.20,
+    taskVerbComplexity: 0.10,
+    scopeBreadth: 0.12,
+    featureListCount: 0.20,
+  },
+  performance: {
+    precision: { trivial: 0, simple: 0, moderate: 0, complex: 0 },
+    recall: { trivial: 0, simple: 0, moderate: 0, complex: 0 },
+    f1: { trivial: 0, simple: 0, moderate: 0, complex: 0 },
+  },
+};
+
+export function estimateComplexitySync(text: string): ComplexityEstimate {
+  const weights = cachedWeights || DEFAULT_WEIGHTS;
+  return _estimateCore(text, weights);
+}
+
+/** Backward-compat: standalone task type inference from text */
+export function inferTaskType(text: string): TaskType {
+  return inferTaskTypeSemantic(text.toLowerCase()).taskType;
+}
+
+function _estimateCore(
+  text: string,
+  weights: WeightConfig,
+  options?: {
+    budget?: ConstraintValue;
+    latency?: ConstraintValue;
+    quality?: ConstraintValue;
+    speed?: ConstraintValue;
+  },
+): ComplexityEstimate {
+  const signals = computeSignalsSync(text, weights);
+
   const semanticMatch = inferTaskTypeSemantic(text);
   const domainPattern = detectDomainPattern(text, semanticMatch.taskType);
-  
+
   const cliConstraints: Partial<Record<ConstraintType, ConstraintValue>> = {};
   if (options?.budget) cliConstraints.budget = options.budget;
   if (options?.latency) cliConstraints.latency = options.latency;
   if (options?.quality) cliConstraints.quality = options.quality;
   if (options?.speed) cliConstraints.speed = options.speed;
-  
+
   const constraints = detectConstraints(text, cliConstraints);
   const scopeModifier = detectScopeModifier(text);
-  
+
   // Add domain/tech signals
   if (domainPattern && domainPattern.techStack.length > 0) {
     signals.push({
       name: "domainComplexity",
       rawValue: domainPattern.complexityModifier,
-      normalizedScore: Math.min(1, (domainPattern.complexityModifier - 0.8) / 0.7), // Map 0.8-1.5 to 0-1
-      weight: weights.weights.domainComplexity || 0.15,
+      normalizedScore: Math.min(1, (domainPattern.complexityModifier - 0.8) / 0.7),
+      weight: weights.weights.domainComplexity || 0.10,
     });
-    
     signals.push({
       name: "techStackDepth",
       rawValue: domainPattern.techStack.length,
       normalizedScore: normalizeLog(domainPattern.techStack.length, 5),
-      weight: weights.weights.techStackDepth || 0.15,
+      weight: weights.weights.techStackDepth || 0.10,
     });
   }
-  
-  const { tier, score } = calculateTier(signals, domainPattern, constraints, scopeModifier);
-  
-  // Legacy fields for backward compat
+
+  // Heuristic pattern boosters
+  const lower = text.toLowerCase();
+  let heuristicBoost = 0;
+
+  if (/\b(refactor|migrate|rewrite|overhaul|convert)\b/i.test(lower) &&
+      /\b(codebase|entire|all|whole|system|project|application|app)\b/i.test(lower)) {
+    heuristicBoost += 0.25;
+  }
+  if (/\b(compliance|gdpr|hipaa|pci|sox|audit)\b/i.test(lower) &&
+      /\b(across|all|entire|every|system|workflow|codebase|platform)\b/i.test(lower)) {
+    heuristicBoost += 0.20;
+  }
+  if (/\bproduction[\s-]?ready\b/i.test(lower)) {
+    heuristicBoost += 0.10;
+  }
+  if (/\b(memory leak|race condition|deadlock|concurrency|heap|segfault|stack overflow|bottleneck)\b/i.test(lower) &&
+      /\b(debug|fix|investigate|diagnose|troubleshoot)\b/i.test(lower)) {
+    heuristicBoost += 0.15;
+  }
+  if (/\b(train|neural|model|ml|machine learning)\b/i.test(lower) &&
+      /\b(deploy|fastapi|flask|api|serve|production|inference)\b/i.test(lower)) {
+    heuristicBoost += 0.15;
+  }
+
+  if (heuristicBoost > 0) {
+    signals.push({
+      name: "heuristicBoost",
+      rawValue: heuristicBoost,
+      normalizedScore: Math.min(1, heuristicBoost),
+      weight: 1.0,
+    });
+  }
+
+  const { tier, score } = calculateTier(signals, domainPattern, constraints, scopeModifier, semanticMatch.taskType);
+
   const wordCountSignal = signals.find(s => s.name === "wordCount");
   const fileRefsSignal = signals.find(s => s.name === "fileRefs");
   const multiStepSignal = signals.find(s => s.name === "multiStep");
   const toolSignal = signals.find(s => s.name === "toolUsage");
   const analysisSignal = signals.find(s => s.name === "analysisDepth");
-  
+
   return {
     tier,
     score,
@@ -691,6 +852,48 @@ export async function estimateComplexity(
       hasAnalysis: (analysisSignal?.rawValue || 0) > 0,
     },
   };
+}
+
+// Sync version of computeSignals (identical logic, no await)
+function computeSignalsSync(text: string, weights: WeightConfig): ComplexitySignal[] {
+  // Delegate to computeSignals — it's already sync in practice (no actual awaits inside)
+  // The async keyword on computeSignals is vestigial; the function body is pure sync.
+  const lower = text.toLowerCase();
+  const words = lower.split(/\s+/).filter(Boolean);
+  const wordCount = words.length;
+  const fileRefs = (lower.match(/\/[\w\-./ ]+\.\w+/g) || []).length;
+  const stepMarkers = (lower.match(/\b(then|after|next|step \d+|finally|first|second|third|fourth|fifth)\b/g) || []).length;
+  const numberedSteps = (lower.match(/\d+\.\s/g) || []).length;
+  const commaItems = (lower.match(/,\s*(?:and\s+)?/g) || []).length;
+  const sentences = text.match(/\.\s+[A-Z]/g)?.length || 0;
+  const multiStepIntensity = stepMarkers + numberedSteps + commaItems + sentences;
+  const tools = lower.match(/\b(git|npm|bun|pip|curl|sed|grep|awk|mkdir|chmod|docker|kubectl|terraform|ansible|webpack|vite|jest|pytest|make|cmake)\b/g) || [];
+  const toolUsageDepth = tools.length;
+  const analysisKeywords = lower.match(/\b(analy[zs]e|assess|evaluate|audit|investigate|research|compare|examine|inspect|suggest|optimize|recommend|improve|bottleneck|performance|diagnose|troubleshoot|review|measure)\b/g) || [];
+  const analysisDepth = analysisKeywords.length;
+  const conceptPatterns = lower.match(/\b(api|gateway|service|mesh|auth|authentication|authorization|oauth|jwt|token|database|cache|queue|worker|scheduler|load.?balancer|proxy|middleware|controller|model|view|schema|migration|endpoint|webhook|socket|websocket|stream|pipeline|microservice|monolith|container|cluster|node|pod|replica|deployment|ingress|certificate|ssl|tls|encryption|hashing|session|cookie|cors|csrf|rate.?limit|throttl|pagination|search|index|shard|backup|restore|monitor|alert|log|metric|trace|dashboard|chart|graph|notification|email|sms|push|cron|job|task|event|message|pub.?sub|kafka|rabbit|redis|memcache|cdn|dns|domain|route|network|firewall|vpc|subnet|security.?group|iam|role|policy|permission|mfa|2fa|totp|saml|sso|ldap|refresh|rotation|testing|unit.?test|integration.?test|e2e|ci|cd|pipeline|build|deploy|release|rollback|canary|blue.?green|feature.?flag|a.?b.?test|compliance|gdpr|hipaa|pci|workflow|codebase|real.?time|chat|presence|persistence|receipt|inventory|payment|order|admin|visualization|report|landing.?page|form|contact|navigation|prototype|poc|neural|dataset|training|inference|prometheus|grafana|terraform|helm|ingress|typescript|javascript|react|angular|vue|fastapi|django|flask|express)\b/g) || [];
+  const uniqueConcepts = new Set(conceptPatterns);
+  const conceptCount = uniqueConcepts.size;
+  const actionVerbs = lower.match(/\b(implement|build|create|write|develop|design|architect|plan|deploy|test|debug|fix|refactor|migrate|optimize|analyze|review|audit|configure|setup|install|integrate|automate|monitor|scale|secure|document|benchmark|profile|validate|verify)\b/g) || [];
+  const uniqueVerbs = new Set(actionVerbs);
+  const taskVerbComplexity = uniqueVerbs.size;
+  const broadScope = (lower.match(/\b(entire|full|comprehensive|all|system|platform|architecture|infrastructure|end.?to.?end|cross.?cutting|enterprise|organization|codebase|stack|ecosystem|framework|suite|pipeline|across|every|workflow)\b/g) || []).length;
+  const narrowScope = (lower.match(/\b(function|method|button|field|typo|variable|parameter|class|component|element|line|column|property|attribute|simple|single|one|quick|small|minor|tiny)\b/g) || []).length;
+  const scopeScore = Math.max(0, broadScope - narrowScope);
+  const commaAndItems = lower.split(/,\s*(?:and\s+)?|(?:\band\b)/).length;
+  const featureListCount = Math.max(0, commaAndItems - 1);
+
+  return [
+    { name: "wordCount", rawValue: wordCount, normalizedScore: normalizeLinear(wordCount, 5, 80), weight: weights.weights.wordCount || 0.04 },
+    { name: "fileRefs", rawValue: fileRefs, normalizedScore: normalizeLog(fileRefs, 5), weight: weights.weights.fileRefs || 0.02 },
+    { name: "multiStep", rawValue: multiStepIntensity, normalizedScore: normalizeLinear(multiStepIntensity, 0, 6), weight: weights.weights.multiStep || 0.10 },
+    { name: "toolUsage", rawValue: toolUsageDepth, normalizedScore: normalizeLog(toolUsageDepth, 5), weight: weights.weights.toolUsage || 0.04 },
+    { name: "analysisDepth", rawValue: analysisDepth, normalizedScore: normalizeLinear(analysisDepth, 0, 3), weight: weights.weights.analysisDepth || 0.08 },
+    { name: "conceptCount", rawValue: conceptCount, normalizedScore: normalizeLinear(conceptCount, 0, 6), weight: weights.weights.conceptCount || 0.20 },
+    { name: "taskVerbComplexity", rawValue: taskVerbComplexity, normalizedScore: normalizeLinear(taskVerbComplexity, 0, 4), weight: weights.weights.taskVerbComplexity || 0.10 },
+    { name: "scopeBreadth", rawValue: scopeScore, normalizedScore: normalizeLinear(scopeScore, 0, 3), weight: weights.weights.scopeBreadth || 0.12 },
+    { name: "featureListCount", rawValue: featureListCount, normalizedScore: normalizeLinear(featureListCount, 0, 4), weight: weights.weights.featureListCount || 0.20 },
+  ];
 }
 
 // ============================================================================
@@ -771,9 +974,9 @@ async function autoTuneWeights(): Promise<void> {
         }
         
         let tier: ComplexityTier;
-        if (score < 0.25) tier = "trivial";
-        else if (score < 0.5) tier = "simple";
-        else if (score < 0.75) tier = "moderate";
+        if (score < 0.04) tier = "trivial";
+        else if (score < 0.15) tier = "simple";
+        else if (score < 0.45) tier = "moderate";
         else tier = "complex";
         
         if (tier === entry.correctedTier) correct++;
