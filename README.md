@@ -4,18 +4,34 @@
 
 A lightweight Zo Computer skill that analyzes task complexity and recommends the optimal OmniRoute combo based on capability matching, cost efficiency, and performance requirements.
 
+**Current Version:** v1.1 (Enhanced Patterns)
+
 ---
 
 ## What It Does
 
 Given any task prompt, this skill:
 
-1. **Analyzes complexity** — word count, file references, multi-step indicators, tool usage patterns
-2. **Infers task type** — coding, review, planning, analysis, debugging, documentation, general
+1. **Analyzes complexity** — word count, file references, multi-step indicators, tool usage patterns, tech stack detection
+2. **Infers task type** — coding, review, planning, analysis, debugging, documentation, data_science, devops, security, content, general
 3. **Scores all available combos** — based on capability matching, cost efficiency, and complexity fit
 4. **Returns recommendation** — combo name, tier, model list, alternatives, reasoning
 
 Use it to make intelligent routing decisions before sending tasks to OmniRoute, ensuring you use the right model tier for each job.
+
+---
+
+## Version History
+
+| Version | Status | Tier Accuracy | Type Accuracy | Notable Features |
+|---------|--------|---------------|---------------|------------------|
+| **v1.1** | ✅ Current | 20% | 72% | Enhanced patterns, 4 new task types (data_science, devops, security, content), 20+ tech stack patterns (oauth, jwt, k8s, terraform, etc.), improved multi-step detection, scope modifiers (quick/thorough/experimental/production) |
+| v1.0 | Baseline | 16% | 76% | Initial release with basic complexity scoring |
+| v2 | ⚠️ Experimental | 16% | 76% | Weighted scoring with feedback loop system. Deferred for calibration. Branch: `experimental/v2-weighted-scoring` |
+
+**Performance:** v1.1 averages 136ms per task, max 177ms
+
+**Note:** Tier accuracy is measured against a 25-task test suite with hand-labeled complexity tiers. Task type classification (72%) is more reliable than tier classification (20%) when inferring from text alone.
 
 ---
 
