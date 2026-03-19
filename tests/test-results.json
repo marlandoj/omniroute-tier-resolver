@@ -1,13 +1,13 @@
 {
-  "timestamp": "2026-03-19T04:28:47.738Z",
+  "timestamp": "2026-03-19T11:27:37.586Z",
   "summary": {
     "totalTests": 25,
-    "tierCorrect": 4,
-    "tierAccuracy": 16,
-    "typeCorrect": 19,
-    "typeAccuracy": 76,
-    "avgPerformanceMs": 169.63659864,
-    "maxPerformanceMs": 198.68198
+    "tierCorrect": 5,
+    "tierAccuracy": 20,
+    "typeCorrect": 18,
+    "typeAccuracy": 72,
+    "avgPerformanceMs": 135.67311339999998,
+    "maxPerformanceMs": 176.476395
   },
   "confusionMatrix": {
     "trivial": {
@@ -29,10 +29,10 @@
       "complex": 0
     },
     "complex": {
-      "trivial": 7,
-      "simple": 2,
-      "moderate": 1,
-      "complex": 0
+      "trivial": 2,
+      "simple": 4,
+      "moderate": 3,
+      "complex": 1
     }
   },
   "results": [
@@ -42,10 +42,10 @@
       "expectedTier": "trivial",
       "actualTier": "trivial",
       "expectedType": "coding",
-      "actualType": "coding",
+      "actualType": "content",
       "match": true,
-      "typeMatch": true,
-      "performanceMs": 166.221077
+      "typeMatch": false,
+      "performanceMs": 127.879491
     },
     {
       "id": 2,
@@ -56,7 +56,7 @@
       "actualType": "debugging",
       "match": false,
       "typeMatch": true,
-      "performanceMs": 198.68198
+      "performanceMs": 129.423916
     },
     {
       "id": 3,
@@ -67,7 +67,7 @@
       "actualType": "review",
       "match": false,
       "typeMatch": true,
-      "performanceMs": 161.479771
+      "performanceMs": 131.070142
     },
     {
       "id": 4,
@@ -78,7 +78,7 @@
       "actualType": "coding",
       "match": false,
       "typeMatch": true,
-      "performanceMs": 191.858026
+      "performanceMs": 129.160734
     },
     {
       "id": 5,
@@ -89,29 +89,29 @@
       "actualType": "analysis",
       "match": false,
       "typeMatch": true,
-      "performanceMs": 169.171868
+      "performanceMs": 131.771693
     },
     {
       "id": 6,
       "task": "Design a microservices architecture for the e-commerce platform with service mesh, API gateway, and event-driven communication",
       "expectedTier": "complex",
-      "actualTier": "trivial",
+      "actualTier": "simple",
       "expectedType": "planning",
       "actualType": "planning",
       "match": false,
       "typeMatch": true,
-      "performanceMs": 178.822876
+      "performanceMs": 133.803837
     },
     {
       "id": 7,
       "task": "Implement OAuth2 authentication with JWT tokens, refresh token rotation, MFA support, and rate limiting. Write comprehensive tests and deployment scripts.",
       "expectedTier": "complex",
-      "actualTier": "moderate",
+      "actualTier": "complex",
       "expectedType": "coding",
-      "actualType": "coding",
-      "match": false,
-      "typeMatch": true,
-      "performanceMs": 180.981436
+      "actualType": "security",
+      "match": true,
+      "typeMatch": false,
+      "performanceMs": 131.725687
     },
     {
       "id": 8,
@@ -122,7 +122,7 @@
       "actualType": "debugging",
       "match": true,
       "typeMatch": false,
-      "performanceMs": 156.76013
+      "performanceMs": 128.767213
     },
     {
       "id": 9,
@@ -130,32 +130,32 @@
       "expectedTier": "complex",
       "actualTier": "simple",
       "expectedType": "security",
-      "actualType": "security",
+      "actualType": "analysis",
       "match": false,
-      "typeMatch": true,
-      "performanceMs": 159.413333
+      "typeMatch": false,
+      "performanceMs": 130.5227
     },
     {
       "id": 10,
       "task": "Train a neural network model to classify images using PyTorch and deploy it with FastAPI",
       "expectedTier": "complex",
-      "actualTier": "trivial",
+      "actualTier": "simple",
       "expectedType": "data_science",
       "actualType": "data_science",
       "match": false,
       "typeMatch": true,
-      "performanceMs": 172.659033
+      "performanceMs": 134.195264
     },
     {
       "id": 11,
       "task": "Set up Kubernetes cluster with Terraform, configure ingress, setup monitoring with Prometheus and Grafana",
       "expectedTier": "complex",
-      "actualTier": "simple",
+      "actualTier": "moderate",
       "expectedType": "devops",
       "actualType": "devops",
       "match": false,
       "typeMatch": true,
-      "performanceMs": 173.28935
+      "performanceMs": 142.952873
     },
     {
       "id": 12,
@@ -166,7 +166,7 @@
       "actualType": "content",
       "match": false,
       "typeMatch": true,
-      "performanceMs": 194.821711
+      "performanceMs": 176.476395
     },
     {
       "id": 13,
@@ -177,7 +177,7 @@
       "actualType": "debugging",
       "match": false,
       "typeMatch": true,
-      "performanceMs": 155.286529
+      "performanceMs": 145.831929
     },
     {
       "id": 14,
@@ -188,7 +188,7 @@
       "actualType": "coding",
       "match": false,
       "typeMatch": true,
-      "performanceMs": 165.242145
+      "performanceMs": 138.75569
     },
     {
       "id": 15,
@@ -199,18 +199,18 @@
       "actualType": "coding",
       "match": false,
       "typeMatch": true,
-      "performanceMs": 157.278349
+      "performanceMs": 135.620995
     },
     {
       "id": 16,
       "task": "Implement real-time WebSocket chat with message persistence, user presence, typing indicators, and read receipts",
       "expectedTier": "complex",
-      "actualTier": "trivial",
+      "actualTier": "simple",
       "expectedType": "coding",
       "actualType": "coding",
       "match": false,
       "typeMatch": true,
-      "performanceMs": 166.871153
+      "performanceMs": 137.423702
     },
     {
       "id": 17,
@@ -221,7 +221,7 @@
       "actualType": "documentation",
       "match": true,
       "typeMatch": true,
-      "performanceMs": 165.000967
+      "performanceMs": 139.3046
     },
     {
       "id": 18,
@@ -232,7 +232,7 @@
       "actualType": "analysis",
       "match": false,
       "typeMatch": true,
-      "performanceMs": 169.960503
+      "performanceMs": 134.451464
     },
     {
       "id": 19,
@@ -240,21 +240,21 @@
       "expectedTier": "simple",
       "actualTier": "trivial",
       "expectedType": "coding",
-      "actualType": "review",
+      "actualType": "general",
       "match": false,
       "typeMatch": false,
-      "performanceMs": 159.381786
+      "performanceMs": 131.362107
     },
     {
       "id": 20,
       "task": "Build production-ready e-commerce platform with payment integration, inventory management, order processing, admin dashboard, and email notifications",
       "expectedTier": "complex",
-      "actualTier": "trivial",
+      "actualTier": "moderate",
       "expectedType": "coding",
       "actualType": "coding",
       "match": false,
       "typeMatch": true,
-      "performanceMs": 171.496568
+      "performanceMs": 132.812931
     },
     {
       "id": 21,
@@ -262,10 +262,10 @@
       "expectedTier": "moderate",
       "actualTier": "trivial",
       "expectedType": "analysis",
-      "actualType": "review",
+      "actualType": "analysis",
       "match": false,
-      "typeMatch": false,
-      "performanceMs": 157.128641
+      "typeMatch": true,
+      "performanceMs": 136.309299
     },
     {
       "id": 22,
@@ -276,7 +276,7 @@
       "actualType": "debugging",
       "match": true,
       "typeMatch": false,
-      "performanceMs": 159.641933
+      "performanceMs": 132.433739
     },
     {
       "id": 23,
@@ -284,10 +284,10 @@
       "expectedTier": "complex",
       "actualTier": "trivial",
       "expectedType": "security",
-      "actualType": "coding",
+      "actualType": "security",
       "match": false,
-      "typeMatch": false,
-      "performanceMs": 161.298368
+      "typeMatch": true,
+      "performanceMs": 143.963623
     },
     {
       "id": 24,
@@ -298,18 +298,18 @@
       "actualType": "coding",
       "match": false,
       "typeMatch": true,
-      "performanceMs": 175.863163
+      "performanceMs": 127.624958
     },
     {
       "id": 25,
       "task": "Architect and implement a distributed caching layer with Redis cluster, cache invalidation strategies, and monitoring. Make it production-ready.",
       "expectedTier": "complex",
-      "actualTier": "trivial",
+      "actualTier": "moderate",
       "expectedType": "coding",
       "actualType": "planning",
       "match": false,
       "typeMatch": false,
-      "performanceMs": 172.30427
+      "performanceMs": 128.182853
     }
   ]
 }

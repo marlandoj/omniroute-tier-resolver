@@ -19,7 +19,7 @@ try {
 } catch {}
 
 export type ComplexityTier = "trivial" | "simple" | "moderate" | "complex";
-export type TaskType = "coding" | "review" | "planning" | "analysis" | "debugging" | "documentation" | "general";
+export type TaskType = "coding" | "review" | "planning" | "analysis" | "debugging" | "documentation" | "general" | "data_science" | "devops" | "security" | "content";
 
 export interface ComplexityEstimate {
   tier: ComplexityTier;
@@ -30,8 +30,12 @@ export interface ComplexityEstimate {
     hasMultiStep: boolean;
     hasTool: boolean;
     hasAnalysis: boolean;
+    techStackCount: number;
+    hasScopeModifier: boolean;
   };
   inferredTaskType: TaskType;
+  detectedTechStack?: string[];
+  scopeModifier?: "quick" | "thorough" | "experimental" | "production" | null;
 }
 
 interface ComboModel {
@@ -68,48 +72,132 @@ const TASK_FITNESS: Record<TaskType, { preferred: string[]; traits: string[] }> 
   debugging: { preferred: ["claude", "deepseek", "codex"], traits: ["code-aware", "fast"] },
   documentation: { preferred: ["gemini", "claude", "openai"], traits: ["clear", "structured"] },
   general: { preferred: ["gemini", "openrouter"], traits: ["fast", "free", "light"] },
+  data_science: { preferred: ["claude", "gemini"], traits: ["analytical", "code-aware"] },
+  devops: { preferred: ["claude", "deepseek"], traits: ["infrastructure-aware", "fast"] },
+  security: { preferred: ["claude", "gemini"], traits: ["thorough", "analytical"] },
+  content: { preferred: ["gemini", "openai"], traits: ["creative", "structured"] },
+};
+
+const TECH_STACK_PATTERNS: Record<string, RegExp> = {
+  react: /\b(react|jsx|tsx|next\.?js)\b/i,
+  vue: /\b(vue|vuex|nuxt)\b/i,
+  angular: /\b(angular|ng)\b/i,
+  node: /\b(node\.?js|express|fastify|koa)\b/i,
+  python: /\b(python|django|flask|fastapi)\b/i,
+  docker: /\b(docker|container|dockerfile)\b/i,
+  kubernetes: /\b(k8s|kubernetes|kubectl|helm)\b/i,
+  terraform: /\b(terraform|tf|hcl)\b/i,
+  aws: /\b(aws|ec2|s3|lambda|cloudfront)\b/i,
+  gcp: /\b(gcp|google cloud|bigquery)\b/i,
+  azure: /\b(azure|azuread)\b/i,
+  postgres: /\b(postgres|postgresql|pg)\b/i,
+  mongodb: /\b(mongo|mongodb)\b/i,
+  redis: /\b(redis|cache)\b/i,
+  graphql: /\b(graphql|gql)\b/i,
+  grpc: /\b(grpc|protobuf)\b/i,
+  oauth: /\b(oauth|oauth2|openid|oidc)\b/i,
+  jwt: /\b(jwt|json web token)\b/i,
+  auth: /\b(authentication|authorization|mfa|2fa|totp|saml|sso)\b/i,
+  security: /\b(security|encrypt|decrypt|vulnerability|penetration|xss|csrf|injection)\b/i,
+};
+
+const SCOPE_MODIFIER_PATTERNS: Record<string, RegExp> = {
+  quick: /\b(quick|fast|rapid|asap|urgent|immediate|briefly)\b/i,
+  thorough: /\b(thorough|comprehensive|complete|detailed|exhaustive|in-depth|careful)\b/i,
+  experimental: /\b(experimental|prototype|poc|proof.?of.?concept|exploratory|trial)\b/i,
+  production: /\b(production|prod|live|deploy|release|ship|stable)\b/i,
 };
 
 const OMNIROUTE_BASE_URL = process.env.OMNIROUTE_BASE_URL || "http://localhost:20128";
 const OMNIROUTE_API_KEY = process.env.OMNIROUTE_API_KEY || "";
 const OMNIROUTE_COOKIE = process.env.OMNIROUTE_COOKIE || "";
 
+function detectTechStack(text: string): string[] {
+  const matches: string[] = [];
+  for (const [tech, pattern] of Object.entries(TECH_STACK_PATTERNS)) {
+    if (pattern.test(text)) matches.push(tech);
+  }
+  return matches;
+}
+
+function detectScopeModifier(text: string): "quick" | "thorough" | "experimental" | "production" | null {
+  for (const [modifier, pattern] of Object.entries(SCOPE_MODIFIER_PATTERNS)) {
+    if (pattern.test(text)) return modifier as any;
+  }
+  return null;
+}
+
 export function estimateComplexity(text: string): ComplexityEstimate {
   const lower = text.toLowerCase();
   const words = lower.split(/\s+/).filter(Boolean).length;
   const fileRefs = (lower.match(/\/[\w\-./]+\.\w+/g) || []).length;
-  const hasMultiStep =
+  
+  // Detect multi-step: explicit keywords OR multiple comma-separated requirements with "and"
+  const hasExplicitMultiStep =
     /\b(then|after that|next|step \d|finally|first|second|third)\b/.test(lower) ||
     (lower.match(/\d+\.\s/g) || []).length >= 2;
+  
+  const commaCount = (lower.match(/,/g) || []).length;
+  const hasAndAfterComma = /,.*\band\b/.test(lower);
+  const hasImplicitMultiStep = commaCount >= 2 && hasAndAfterComma;
+  
+  const hasMultiStep = hasExplicitMultiStep || hasImplicitMultiStep;
+  
   const hasTool = /\b(git|npm|bun|pip|curl|sed|grep|mkdir|chmod|docker)\b/.test(lower);
   const hasAnalysis = /\b(analy[zs]e|review|audit|compare|evaluate|assess|inspect)\b/.test(lower);
+  
+  const techStack = detectTechStack(text);
+  const scopeModifier = detectScopeModifier(text);
+  const techStackCount = techStack.length;
+  const hasScopeModifier = scopeModifier !== null;
 
   const score =
-    (words > 200 ? 1 : 0) +
-    (fileRefs > 3 ? 1 : 0) +
-    (hasMultiStep ? 1 : 0) +
+    (words > 50 ? 1 : 0) +
+    (fileRefs > 0 ? 1 : 0) +
+    (hasMultiStep ? 2 : 0) +
     (hasTool ? 1 : 0) +
-    (hasAnalysis ? 1 : 0);
+    (hasAnalysis ? 1 : 0) +
+    (techStackCount >= 2 ? 2 : 0) +
+    (scopeModifier === "thorough" || scopeModifier === "production" ? 2 : 0);
 
   let tier: ComplexityTier;
   if (score <= 1) tier = "trivial";
-  else if (score <= 2) tier = "simple";
-  else if (score <= 3) tier = "moderate";
+  else if (score <= 3) tier = "simple";
+  else if (score <= 5) tier = "moderate";
   else tier = "complex";
 
   const inferredTaskType = inferTaskType(lower);
 
-  return { tier, score, signals: { wordCount: words, fileCount: fileRefs, hasMultiStep, hasTool, hasAnalysis }, inferredTaskType };
+  return { 
+    tier, 
+    score, 
+    signals: { 
+      wordCount: words, 
+      fileCount: fileRefs, 
+      hasMultiStep, 
+      hasTool, 
+      hasAnalysis,
+      techStackCount,
+      hasScopeModifier,
+    }, 
+    inferredTaskType,
+    detectedTechStack: techStack.length > 0 ? techStack : undefined,
+    scopeModifier,
+  };
 }
 
 export function inferTaskType(text: string): TaskType {
   const patterns: [TaskType, RegExp][] = [
-    ["debugging", /\b(debug|fix|bug|error|crash|broken|stack.?trace|exception|fail)\b/],
-    ["analysis", /\b(analy[zs]e|assess|evaluate|audit|investigate|research|compare)\b/],
-    ["review", /\b(review|pr|pull.?request|code.?review|diff|feedback)\b/],
-    ["planning", /\b(plan|design|architect|roadmap|strategy|outline|proposal|rfc)\b/],
-    ["documentation", /\b(document|readme|docs|write.?up|explain|tutorial|guide)\b/],
-    ["coding", /\b(implement|build|create|write|code|develop|add|refactor|migrate|deploy)\b/],
+    ["debugging", /\b(debug|fix|bug|error|crash|broken|stack.?trace|exception|fail(ure)?|issue|problem|troubleshoot|diagnose)\b/],
+    ["analysis", /\b(analy[zs]e|assess|evaluate|audit|investigate|research|compare|examine|inspect|study|explore)\b/],
+    ["review", /\b(review|pr|pull.?request|code.?review|diff|feedback|critique|assess.?code|examine.?code)\b/],
+    ["planning", /\b(plan|design|architect|roadmap|strategy|outline|proposal|rfc|spec|blueprint|scheme)\b/],
+    ["documentation", /\b(document|readme|docs|write.?up|explain|tutorial|guide|manual|howto|walkthrough)\b/],
+    ["data_science", /\b(model|train|dataset|ml|machine.?learning|ai|neural|pandas|numpy|scikit|tensorflow|pytorch|data.?analysis|predict|classification|regression)\b/],
+    ["devops", /\b(deploy|ci|cd|pipeline|docker|kubernetes|k8s|terraform|ansible|jenkins|github.?actions|infrastructure|provision|orchestrate)\b/],
+    ["security", /\b(security|vulnerability|cve|exploit|penetration|compliance|encryption|auth(entication)?|authorization|owasp|xss|sql.?injection)\b/],
+    ["content", /\b(write|blog|article|post|copy|content|marketing|seo|draft|compose)\b/],
+    ["coding", /\b(implement|build|create|write|code|develop|add|refactor|migrate|deploy|construct|program)\b/],
   ];
 
   for (const [taskType, pattern] of patterns) {
