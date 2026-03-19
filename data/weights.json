@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "lastUpdated": 1773893281167,
+  "feedbackCount": 0,
+  "weights": {
+    "wordCount": 0.14,
+    "fileRefs": 0.14,
+    "multiStep": 0.14,
+    "toolUsage": 0.14,
+    "analysisDepth": 0.14,
+    "domainComplexity": 0.15,
+    "techStackDepth": 0.15
+  },
+  "performance": {
+    "precision": {
+      "trivial": 0,
+      "simple": 0,
+      "moderate": 0,
+      "complex": 0
+    },
+    "recall": {
+      "trivial": 0,
+      "simple": 0,
+      "moderate": 0,
+      "complex": 0
+    },
+    "f1": {
+      "trivial": 0,
+      "simple": 0,
+      "moderate": 0,
+      "complex": 0
+    }
+  }
+}

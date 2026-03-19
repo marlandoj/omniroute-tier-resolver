@@ -1,0 +1,25 @@
+{"id":1,"task":"Write a function to add two numbers","expectedTier":"trivial","expectedType":"coding","rationale":"Simple coding task, no complexity"}
+{"id":2,"task":"Fix the login bug where users can't sign in","expectedTier":"simple","expectedType":"debugging","rationale":"Debugging single issue"}
+{"id":3,"task":"Review the PR for the authentication module","expectedTier":"simple","expectedType":"review","rationale":"Code review, single module"}
+{"id":4,"task":"Build a React dashboard with charts and real-time data","expectedTier":"moderate","expectedType":"coding","rationale":"Frontend with multiple components, real-time complexity"}
+{"id":5,"task":"Analyze the performance bottlenecks in the database queries and suggest optimizations","expectedTier":"moderate","expectedType":"analysis","rationale":"Requires investigation + recommendations"}
+{"id":6,"task":"Design a microservices architecture for the e-commerce platform with service mesh, API gateway, and event-driven communication","expectedTier":"complex","expectedType":"planning","rationale":"Multi-component architecture design"}
+{"id":7,"task":"Implement OAuth2 authentication with JWT tokens, refresh token rotation, MFA support, and rate limiting. Write comprehensive tests and deployment scripts.","expectedTier":"complex","expectedType":"coding","rationale":"Multi-step security system with testing + deployment"}
+{"id":8,"task":"Quick fix for the CSS alignment issue","expectedTier":"trivial","expectedType":"coding","rationale":"Simple fix, 'quick' scope modifier"}
+{"id":9,"task":"Thorough security audit of the entire codebase with penetration testing","expectedTier":"complex","expectedType":"security","rationale":"Comprehensive audit, 'thorough' modifier, security domain"}
+{"id":10,"task":"Train a neural network model to classify images using PyTorch and deploy it with FastAPI","expectedTier":"complex","expectedType":"data_science","rationale":"ML model + deployment, data science domain"}
+{"id":11,"task":"Set up Kubernetes cluster with Terraform, configure ingress, setup monitoring with Prometheus and Grafana","expectedTier":"complex","expectedType":"devops","rationale":"Infrastructure setup, multiple tools"}
+{"id":12,"task":"Write a blog post about best practices for React hooks","expectedTier":"simple","expectedType":"content","rationale":"Content creation, single topic"}
+{"id":13,"task":"Debug the memory leak in the Node.js application","expectedTier":"moderate","expectedType":"debugging","rationale":"Performance debugging, requires investigation"}
+{"id":14,"task":"Refactor the codebase to use TypeScript instead of JavaScript","expectedTier":"complex","expectedType":"coding","rationale":"Large-scale migration across codebase"}
+{"id":15,"task":"Create a proof-of-concept for the new search feature","expectedTier":"simple","expectedType":"coding","rationale":"Experimental scope modifier, POC not production"}
+{"id":16,"task":"Implement real-time WebSocket chat with message persistence, user presence, typing indicators, and read receipts","expectedTier":"complex","expectedType":"coding","rationale":"Real-time system with multiple features"}
+{"id":17,"task":"Document the API endpoints in the README","expectedTier":"trivial","expectedType":"documentation","rationale":"Simple documentation task"}
+{"id":18,"task":"Analyze last month's user engagement metrics and create a comprehensive report with visualizations and actionable insights","expectedTier":"moderate","expectedType":"analysis","rationale":"Data analysis + visualization + recommendations"}
+{"id":19,"task":"Quick prototype for the mobile app navigation","expectedTier":"simple","expectedType":"coding","rationale":"Quick + prototype modifiers"}
+{"id":20,"task":"Build production-ready e-commerce platform with payment integration, inventory management, order processing, admin dashboard, and email notifications","expectedTier":"complex","expectedType":"coding","rationale":"Full system, production-ready, multiple subsystems"}
+{"id":21,"task":"Review and compare three different database solutions for our use case","expectedTier":"moderate","expectedType":"analysis","rationale":"Comparative analysis, research required"}
+{"id":22,"task":"Fix typo in the documentation","expectedTier":"trivial","expectedType":"documentation","rationale":"Minimal effort fix"}
+{"id":23,"task":"Implement GDPR compliance checks across all data processing workflows","expectedTier":"complex","expectedType":"security","rationale":"Compliance across entire system"}
+{"id":24,"task":"Create a simple landing page with contact form","expectedTier":"simple","expectedType":"coding","rationale":"Single page, basic functionality"}
+{"id":25,"task":"Architect and implement a distributed caching layer with Redis cluster, cache invalidation strategies, and monitoring. Make it production-ready.","expectedTier":"complex","expectedType":"coding","rationale":"Distributed system, production requirement, infrastructure"}

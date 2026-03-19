@@ -1,0 +1,315 @@
+{
+  "timestamp": "2026-03-19T04:28:47.738Z",
+  "summary": {
+    "totalTests": 25,
+    "tierCorrect": 4,
+    "tierAccuracy": 16,
+    "typeCorrect": 19,
+    "typeAccuracy": 76,
+    "avgPerformanceMs": 169.63659864,
+    "maxPerformanceMs": 198.68198
+  },
+  "confusionMatrix": {
+    "trivial": {
+      "trivial": 4,
+      "simple": 0,
+      "moderate": 0,
+      "complex": 0
+    },
+    "simple": {
+      "trivial": 6,
+      "simple": 0,
+      "moderate": 0,
+      "complex": 0
+    },
+    "moderate": {
+      "trivial": 4,
+      "simple": 1,
+      "moderate": 0,
+      "complex": 0
+    },
+    "complex": {
+      "trivial": 7,
+      "simple": 2,
+      "moderate": 1,
+      "complex": 0
+    }
+  },
+  "results": [
+    {
+      "id": 1,
+      "task": "Write a function to add two numbers",
+      "expectedTier": "trivial",
+      "actualTier": "trivial",
+      "expectedType": "coding",
+      "actualType": "coding",
+      "match": true,
+      "typeMatch": true,
+      "performanceMs": 166.221077
+    },
+    {
+      "id": 2,
+      "task": "Fix the login bug where users can't sign in",
+      "expectedTier": "simple",
+      "actualTier": "trivial",
+      "expectedType": "debugging",
+      "actualType": "debugging",
+      "match": false,
+      "typeMatch": true,
+      "performanceMs": 198.68198
+    },
+    {
+      "id": 3,
+      "task": "Review the PR for the authentication module",
+      "expectedTier": "simple",
+      "actualTier": "trivial",
+      "expectedType": "review",
+      "actualType": "review",
+      "match": false,
+      "typeMatch": true,
+      "performanceMs": 161.479771
+    },
+    {
+      "id": 4,
+      "task": "Build a React dashboard with charts and real-time data",
+      "expectedTier": "moderate",
+      "actualTier": "trivial",
+      "expectedType": "coding",
+      "actualType": "coding",
+      "match": false,
+      "typeMatch": true,
+      "performanceMs": 191.858026
+    },
+    {
+      "id": 5,
+      "task": "Analyze the performance bottlenecks in the database queries and suggest optimizations",
+      "expectedTier": "moderate",
+      "actualTier": "trivial",
+      "expectedType": "analysis",
+      "actualType": "analysis",
+      "match": false,
+      "typeMatch": true,
+      "performanceMs": 169.171868
+    },
+    {
+      "id": 6,
+      "task": "Design a microservices architecture for the e-commerce platform with service mesh, API gateway, and event-driven communication",
+      "expectedTier": "complex",
+      "actualTier": "trivial",
+      "expectedType": "planning",
+      "actualType": "planning",
+      "match": false,
+      "typeMatch": true,
+      "performanceMs": 178.822876
+    },
+    {
+      "id": 7,
+      "task": "Implement OAuth2 authentication with JWT tokens, refresh token rotation, MFA support, and rate limiting. Write comprehensive tests and deployment scripts.",
+      "expectedTier": "complex",
+      "actualTier": "moderate",
+      "expectedType": "coding",
+      "actualType": "coding",
+      "match": false,
+      "typeMatch": true,
+      "performanceMs": 180.981436
+    },
+    {
+      "id": 8,
+      "task": "Quick fix for the CSS alignment issue",
+      "expectedTier": "trivial",
+      "actualTier": "trivial",
+      "expectedType": "coding",
+      "actualType": "debugging",
+      "match": true,
+      "typeMatch": false,
+      "performanceMs": 156.76013
+    },
+    {
+      "id": 9,
+      "task": "Thorough security audit of the entire codebase with penetration testing",
+      "expectedTier": "complex",
+      "actualTier": "simple",
+      "expectedType": "security",
+      "actualType": "security",
+      "match": false,
+      "typeMatch": true,
+      "performanceMs": 159.413333
+    },
+    {
+      "id": 10,
+      "task": "Train a neural network model to classify images using PyTorch and deploy it with FastAPI",
+      "expectedTier": "complex",
+      "actualTier": "trivial",
+      "expectedType": "data_science",
+      "actualType": "data_science",
+      "match": false,
+      "typeMatch": true,
+      "performanceMs": 172.659033
+    },
+    {
+      "id": 11,
+      "task": "Set up Kubernetes cluster with Terraform, configure ingress, setup monitoring with Prometheus and Grafana",
+      "expectedTier": "complex",
+      "actualTier": "simple",
+      "expectedType": "devops",
+      "actualType": "devops",
+      "match": false,
+      "typeMatch": true,
+      "performanceMs": 173.28935
+    },
+    {
+      "id": 12,
+      "task": "Write a blog post about best practices for React hooks",
+      "expectedTier": "simple",
+      "actualTier": "trivial",
+      "expectedType": "content",
+      "actualType": "content",
+      "match": false,
+      "typeMatch": true,
+      "performanceMs": 194.821711
+    },
+    {
+      "id": 13,
+      "task": "Debug the memory leak in the Node.js application",
+      "expectedTier": "moderate",
+      "actualTier": "trivial",
+      "expectedType": "debugging",
+      "actualType": "debugging",
+      "match": false,
+      "typeMatch": true,
+      "performanceMs": 155.286529
+    },
+    {
+      "id": 14,
+      "task": "Refactor the codebase to use TypeScript instead of JavaScript",
+      "expectedTier": "complex",
+      "actualTier": "trivial",
+      "expectedType": "coding",
+      "actualType": "coding",
+      "match": false,
+      "typeMatch": true,
+      "performanceMs": 165.242145
+    },
+    {
+      "id": 15,
+      "task": "Create a proof-of-concept for the new search feature",
+      "expectedTier": "simple",
+      "actualTier": "trivial",
+      "expectedType": "coding",
+      "actualType": "coding",
+      "match": false,
+      "typeMatch": true,
+      "performanceMs": 157.278349
+    },
+    {
+      "id": 16,
+      "task": "Implement real-time WebSocket chat with message persistence, user presence, typing indicators, and read receipts",
+      "expectedTier": "complex",
+      "actualTier": "trivial",
+      "expectedType": "coding",
+      "actualType": "coding",
+      "match": false,
+      "typeMatch": true,
+      "performanceMs": 166.871153
+    },
+    {
+      "id": 17,
+      "task": "Document the API endpoints in the README",
+      "expectedTier": "trivial",
+      "actualTier": "trivial",
+      "expectedType": "documentation",
+      "actualType": "documentation",
+      "match": true,
+      "typeMatch": true,
+      "performanceMs": 165.000967
+    },
+    {
+      "id": 18,
+      "task": "Analyze last month's user engagement metrics and create a comprehensive report with visualizations and actionable insights",
+      "expectedTier": "moderate",
+      "actualTier": "simple",
+      "expectedType": "analysis",
+      "actualType": "analysis",
+      "match": false,
+      "typeMatch": true,
+      "performanceMs": 169.960503
+    },
+    {
+      "id": 19,
+      "task": "Quick prototype for the mobile app navigation",
+      "expectedTier": "simple",
+      "actualTier": "trivial",
+      "expectedType": "coding",
+      "actualType": "review",
+      "match": false,
+      "typeMatch": false,
+      "performanceMs": 159.381786
+    },
+    {
+      "id": 20,
+      "task": "Build production-ready e-commerce platform with payment integration, inventory management, order processing, admin dashboard, and email notifications",
+      "expectedTier": "complex",
+      "actualTier": "trivial",
+      "expectedType": "coding",
+      "actualType": "coding",
+      "match": false,
+      "typeMatch": true,
+      "performanceMs": 171.496568
+    },
+    {
+      "id": 21,
+      "task": "Review and compare three different database solutions for our use case",
+      "expectedTier": "moderate",
+      "actualTier": "trivial",
+      "expectedType": "analysis",
+      "actualType": "review",
+      "match": false,
+      "typeMatch": false,
+      "performanceMs": 157.128641
+    },
+    {
+      "id": 22,
+      "task": "Fix typo in the documentation",
+      "expectedTier": "trivial",
+      "actualTier": "trivial",
+      "expectedType": "documentation",
+      "actualType": "debugging",
+      "match": true,
+      "typeMatch": false,
+      "performanceMs": 159.641933
+    },
+    {
+      "id": 23,
+      "task": "Implement GDPR compliance checks across all data processing workflows",
+      "expectedTier": "complex",
+      "actualTier": "trivial",
+      "expectedType": "security",
+      "actualType": "coding",
+      "match": false,
+      "typeMatch": false,
+      "performanceMs": 161.298368
+    },
+    {
+      "id": 24,
+      "task": "Create a simple landing page with contact form",
+      "expectedTier": "simple",
+      "actualTier": "trivial",
+      "expectedType": "coding",
+      "actualType": "coding",
+      "match": false,
+      "typeMatch": true,
+      "performanceMs": 175.863163
+    },
+    {
+      "id": 25,
+      "task": "Architect and implement a distributed caching layer with Redis cluster, cache invalidation strategies, and monitoring. Make it production-ready.",
+      "expectedTier": "complex",
+      "actualTier": "trivial",
+      "expectedType": "coding",
+      "actualType": "planning",
+      "match": false,
+      "typeMatch": false,
+      "performanceMs": 172.30427
+    }
+  ]
+}

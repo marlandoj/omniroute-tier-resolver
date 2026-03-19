@@ -1,0 +1,243 @@
+id: seed-complexity-enhancement-20260318
+created: 2026-03-18T21:00:00-07:00
+goal: "Enhance OmniRoute tier-resolver complexity analysis to improve tier accuracy and cost optimization through weighted scoring, domain-specific patterns, constraint detection, semantic task inference, scope modifiers, and feedback-based learning"
+
+constraints:
+  - "Breaking changes acceptable (no existing users)"
+  - "Semantic inference must run locally (no external API calls)"
+  - "Performance budget: <100ms per complexity analysis"
+  - "Feedback data stored in skill directory"
+  - "Constraint resolution priority: explicit > inferred > default tier logic"
+  - "Initial signal weights start equal, auto-tune via feedback over time"
+  - "All enhancements must work in Bun runtime with zero external dependencies"
+
+acceptance_criteria:
+  - "Weighted scoring system replaces binary (0/1) signals with continuous scores (0.0-1.0)"
+  - "Domain-specific patterns detect subdomain granularity (frontend/backend/infra), new domains (data science/devops/security/content), and technology stacks (React/Docker/Terraform)"
+  - "Constraint detection parses natural language budget/latency/quality requirements from task text"
+  - "CLI accepts explicit constraint flags (--budget, --latency, --quality, --speed) that override inferred constraints"
+  - "Scope modifiers (quick/thorough/experimental) detected from text and affect tier selection"
+  - "Semantic task inference uses keyword expansion + shallow semantics (word similarity) + contextual semantics (word combinations)"
+  - "Semantic inference runs locally without external API calls"
+  - "Feedback system logs recommendations to JSONL file in skill directory"
+  - "Feedback CLI accepts explicit corrections (tier-resolve.ts feedback --task-id X --correct-tier Y)"
+  - "Auto-tuning periodically recalculates signal weights from feedback history"
+  - "Test suite with 20-30 representative tasks validates tier classifications"
+  - "Documentation updated: README.md, references/complexity-algorithm.md, usage examples"
+  - "Performance validated: complexity analysis completes in <100ms on typical tasks"
+
+ontology:
+  - name: ComplexitySignal
+    description: "A measurable indicator of task complexity"
+    fields:
+      - name: name
+        type: string
+        description: "Signal identifier (e.g., wordCount, domainDepth, constraintCount)"
+      - name: rawValue
+        type: number
+        description: "Raw measurement before normalization"
+      - name: normalizedScore
+        type: number
+        description: "Normalized value 0.0-1.0"
+      - name: weight
+        type: number
+        description: "Current weight in scoring algorithm (sum to 1.0)"
+      - name: autoTuned
+        type: boolean
+        description: "Whether this weight has been adjusted by feedback"
+
+  - name: ConstraintSpec
+    description: "A user requirement that affects tier selection"
+    fields:
+      - name: type
+        type: string
+        description: "Constraint category: budget | latency | quality | speed"
+      - name: value
+        type: string
+        description: "Constraint value: low/medium/high or specific threshold"
+      - name: source
+        type: string
+        description: "Origin: explicit (CLI flag) | inferred (text) | default"
+      - name: priority
+        type: number
+        description: "Resolution priority when conflicts occur"
+
+  - name: DomainPattern
+    description: "A recognized domain/subdomain with complexity implications"
+    fields:
+      - name: domain
+        type: string
+        description: "Top-level domain: coding | data_science | devops | security | content"
+      - name: subdomain
+        type: string
+        description: "Specialization: frontend | backend | infrastructure | ml | audit"
+      - name: techStack
+        type: string[]
+        description: "Detected technologies: [react, docker, terraform, pandas]"
+      - name: complexityModifier
+        type: number
+        description: "Multiplier applied to base complexity: 0.8-1.5"
+
+  - name: SemanticMatch
+    description: "A task type match from semantic inference"
+    fields:
+      - name: taskType
+        type: string
+        description: "Inferred type: coding | review | planning | analysis | debugging | documentation | general"
+      - name: confidence
+        type: number
+        description: "Match confidence 0.0-1.0"
+      - name: matchMethod
+        type: string
+        description: "How matched: keyword | synonym | contextual"
+      - name: evidenceTokens
+        type: string[]
+        description: "Words/phrases that triggered the match"
+
+  - name: FeedbackEntry
+    description: "A logged recommendation with optional correction"
+    fields:
+      - name: id
+        type: string
+        description: "Unique identifier (UUID)"
+      - name: timestamp
+        type: number
+        description: "Unix epoch ms"
+      - name: taskText
+        type: string
+        description: "Original task prompt"
+      - name: recommendedTier
+        type: string
+        description: "Tier suggested by algorithm"
+      - name: recommendedCombo
+        type: string
+        description: "Combo name returned to user"
+      - name: actualTier
+        type: string
+        description: "Tier that was actually used (if different)"
+      - name: correctedTier
+        type: string
+        description: "Human-provided correction (if any)"
+      - name: signals
+        type: object
+        description: "Snapshot of signal values at recommendation time"
+      - name: outcome
+        type: string
+        description: "Success | failure | unknown"
+
+  - name: WeightConfig
+    description: "Current signal weights and tuning metadata"
+    fields:
+      - name: version
+        type: number
+        description: "Weight schema version"
+      - name: lastUpdated
+        type: number
+        description: "Unix epoch ms of last auto-tune"
+      - name: feedbackCount
+        type: number
+        description: "Number of feedback entries used for tuning"
+      - name: weights
+        type: object
+        description: "Map of signal name to current weight"
+      - name: performance
+        type: object
+        description: "Accuracy metrics: precision, recall, f1 by tier"
+
+evaluation_principles:
+  - name: tier_accuracy
+    description: "Percentage of tasks correctly classified to appropriate tier"
+    weight: 0.35
+  - name: cost_efficiency
+    description: "Reduction in over-provisioning to expensive combos"
+    weight: 0.25
+  - name: performance
+    description: "Complexity analysis completes in <100ms"
+    weight: 0.15
+  - name: semantic_quality
+    description: "Task type inference matches human judgment"
+    weight: 0.15
+  - name: feedback_utility
+    description: "Auto-tuning improves accuracy over baseline"
+    weight: 0.10
+
+exit_conditions:
+  - name: all_capabilities_implemented
+    description: "Six enhancement capabilities are functional"
+    criteria: "weighted scoring + domain patterns + constraint detection + semantic inference + scope modifiers + feedback system all pass unit tests"
+  
+  - name: test_suite_passes
+    description: "Representative task set correctly classified"
+    criteria: "20-30 task test suite with >=80% tier accuracy on first run"
+  
+  - name: documentation_complete
+    description: "All docs updated with new capabilities"
+    criteria: "README.md updated, references/complexity-algorithm.md rewritten, CLI --help reflects new flags, 5+ usage examples added"
+  
+  - name: feedback_operational
+    description: "Feedback loop functions end-to-end"
+    criteria: "Can log recommendation, submit correction, trigger auto-tune, see weight changes reflected in next run"
+  
+  - name: performance_validated
+    description: "Meets latency budget"
+    criteria: "Benchmark shows p95 latency <100ms on 100 diverse task samples"
+
+implementation_phases:
+  - phase: 1
+    name: "Core Weighted Scoring"
+    tasks:
+      - "Replace binary signals with continuous scoring functions (word count, file refs, multi-step, tools, analysis)"
+      - "Implement signal normalization (0.0-1.0 scale)"
+      - "Add WeightConfig schema with equal initial weights"
+      - "Update ComplexityEstimate interface to include signal breakdown"
+    
+  - phase: 2
+    name: "Domain & Technology Detection"
+    tasks:
+      - "Build domain pattern matcher (coding subdomains, data science, devops, security, content)"
+      - "Add technology stack detector (React/Vue/Angular, Docker/K8s, Terraform/Pulumi, Pandas/PyTorch)"
+      - "Implement complexity modifiers per domain/tech combo"
+      - "Update task type inference to use domain context"
+    
+  - phase: 3
+    name: "Constraint Detection & CLI"
+    tasks:
+      - "Parse natural language budget/latency/quality/speed keywords from task text"
+      - "Add CLI flags: --budget, --latency, --quality, --speed"
+      - "Implement constraint priority resolution (explicit > inferred > default)"
+      - "Apply constraint adjustments to tier selection"
+    
+  - phase: 4
+    name: "Semantic Task Inference"
+    tasks:
+      - "Expand keyword dictionaries with synonyms and related terms"
+      - "Implement shallow semantic matching (word similarity without external APIs)"
+      - "Add contextual semantic analysis (multi-word combinations, negations)"
+      - "Update inferTaskType() to return confidence scores"
+    
+  - phase: 5
+    name: "Feedback System"
+    tasks:
+      - "Create feedback.jsonl log file structure"
+      - "Add logging on every tier-resolve invocation"
+      - "Implement feedback CLI subcommand for corrections"
+      - "Build auto-tune algorithm (recalculate weights from feedback data)"
+      - "Add periodic auto-tune trigger (every N corrections or on-demand)"
+    
+  - phase: 6
+    name: "Testing & Documentation"
+    tasks:
+      - "Create test suite with 20-30 diverse tasks and expected tiers"
+      - "Run performance benchmark (100 samples, measure p50/p95/p99)"
+      - "Update README.md with new capabilities and examples"
+      - "Rewrite references/complexity-algorithm.md with full algorithm details"
+      - "Add CLI usage examples for all new flags"
+
+technical_notes:
+  - "Use Bun's built-in APIs only (no npm packages for semantic matching)"
+  - "Feedback file: Skills/omniroute-tier-resolver/data/feedback.jsonl"
+  - "Weight config: Skills/omniroute-tier-resolver/data/weights.json"
+  - "Semantic word similarity: cosine similarity on character n-grams (no word2vec)"
+  - "Auto-tune algorithm: gradient-free optimization (grid search or Nelder-Mead simplex)"
+  - "Performance profiling: Bun.nanoseconds() for sub-millisecond precision"
+  - "Backward compatibility: breaking changes OK, bump to v2.0.0"
