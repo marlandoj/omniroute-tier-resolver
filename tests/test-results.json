@@ -1,38 +1,38 @@
 {
-  "timestamp": "2026-03-19T11:27:37.586Z",
+  "timestamp": "2026-03-29T16:52:33.933Z",
   "summary": {
-    "totalTests": 25,
-    "tierCorrect": 5,
-    "tierAccuracy": 20,
-    "typeCorrect": 18,
-    "typeAccuracy": 72,
-    "avgPerformanceMs": 135.67311339999998,
-    "maxPerformanceMs": 176.476395
+    "totalTests": 50,
+    "tierCorrect": 42,
+    "tierAccuracy": 84,
+    "typeCorrect": 34,
+    "typeAccuracy": 68,
+    "avgPerformanceMs": 167.07494934,
+    "maxPerformanceMs": 225.080973
   },
   "confusionMatrix": {
     "trivial": {
-      "trivial": 4,
-      "simple": 0,
+      "trivial": 3,
+      "simple": 2,
       "moderate": 0,
       "complex": 0
     },
     "simple": {
-      "trivial": 6,
-      "simple": 0,
-      "moderate": 0,
+      "trivial": 2,
+      "simple": 14,
+      "moderate": 2,
       "complex": 0
     },
     "moderate": {
-      "trivial": 4,
-      "simple": 1,
-      "moderate": 0,
+      "trivial": 0,
+      "simple": 2,
+      "moderate": 11,
       "complex": 0
     },
     "complex": {
-      "trivial": 2,
-      "simple": 4,
-      "moderate": 3,
-      "complex": 1
+      "trivial": 0,
+      "simple": 0,
+      "moderate": 0,
+      "complex": 14
     }
   },
   "results": [
@@ -42,65 +42,65 @@
       "expectedTier": "trivial",
       "actualTier": "trivial",
       "expectedType": "coding",
-      "actualType": "content",
+      "actualType": "coding",
       "match": true,
-      "typeMatch": false,
-      "performanceMs": 127.879491
+      "typeMatch": true,
+      "performanceMs": 151.629641
     },
     {
       "id": 2,
       "task": "Fix the login bug where users can't sign in",
       "expectedTier": "simple",
-      "actualTier": "trivial",
+      "actualTier": "simple",
       "expectedType": "debugging",
       "actualType": "debugging",
-      "match": false,
+      "match": true,
       "typeMatch": true,
-      "performanceMs": 129.423916
+      "performanceMs": 163.425801
     },
     {
       "id": 3,
       "task": "Review the PR for the authentication module",
       "expectedTier": "simple",
-      "actualTier": "trivial",
+      "actualTier": "simple",
       "expectedType": "review",
       "actualType": "review",
-      "match": false,
+      "match": true,
       "typeMatch": true,
-      "performanceMs": 131.070142
+      "performanceMs": 225.080973
     },
     {
       "id": 4,
       "task": "Build a React dashboard with charts and real-time data",
       "expectedTier": "moderate",
-      "actualTier": "trivial",
+      "actualTier": "moderate",
       "expectedType": "coding",
       "actualType": "coding",
-      "match": false,
+      "match": true,
       "typeMatch": true,
-      "performanceMs": 129.160734
+      "performanceMs": 155.290989
     },
     {
       "id": 5,
       "task": "Analyze the performance bottlenecks in the database queries and suggest optimizations",
       "expectedTier": "moderate",
-      "actualTier": "trivial",
+      "actualTier": "moderate",
       "expectedType": "analysis",
       "actualType": "analysis",
-      "match": false,
+      "match": true,
       "typeMatch": true,
-      "performanceMs": 131.771693
+      "performanceMs": 177.775524
     },
     {
       "id": 6,
       "task": "Design a microservices architecture for the e-commerce platform with service mesh, API gateway, and event-driven communication",
       "expectedTier": "complex",
-      "actualTier": "simple",
+      "actualTier": "complex",
       "expectedType": "planning",
       "actualType": "planning",
-      "match": false,
+      "match": true,
       "typeMatch": true,
-      "performanceMs": 133.803837
+      "performanceMs": 197.733259
     },
     {
       "id": 7,
@@ -108,10 +108,10 @@
       "expectedTier": "complex",
       "actualTier": "complex",
       "expectedType": "coding",
-      "actualType": "security",
+      "actualType": "coding",
       "match": true,
-      "typeMatch": false,
-      "performanceMs": 131.725687
+      "typeMatch": true,
+      "performanceMs": 167.269194
     },
     {
       "id": 8,
@@ -119,120 +119,120 @@
       "expectedTier": "trivial",
       "actualTier": "trivial",
       "expectedType": "coding",
-      "actualType": "debugging",
+      "actualType": "general",
       "match": true,
       "typeMatch": false,
-      "performanceMs": 128.767213
+      "performanceMs": 157.368264
     },
     {
       "id": 9,
       "task": "Thorough security audit of the entire codebase with penetration testing",
       "expectedTier": "complex",
-      "actualTier": "simple",
+      "actualTier": "complex",
       "expectedType": "security",
-      "actualType": "analysis",
-      "match": false,
-      "typeMatch": false,
-      "performanceMs": 130.5227
+      "actualType": "security",
+      "match": true,
+      "typeMatch": true,
+      "performanceMs": 154.511149
     },
     {
       "id": 10,
       "task": "Train a neural network model to classify images using PyTorch and deploy it with FastAPI",
       "expectedTier": "complex",
-      "actualTier": "simple",
+      "actualTier": "complex",
       "expectedType": "data_science",
       "actualType": "data_science",
-      "match": false,
+      "match": true,
       "typeMatch": true,
-      "performanceMs": 134.195264
+      "performanceMs": 162.004232
     },
     {
       "id": 11,
       "task": "Set up Kubernetes cluster with Terraform, configure ingress, setup monitoring with Prometheus and Grafana",
       "expectedTier": "complex",
-      "actualTier": "moderate",
+      "actualTier": "complex",
       "expectedType": "devops",
       "actualType": "devops",
-      "match": false,
+      "match": true,
       "typeMatch": true,
-      "performanceMs": 142.952873
+      "performanceMs": 206.503935
     },
     {
       "id": 12,
       "task": "Write a blog post about best practices for React hooks",
       "expectedTier": "simple",
-      "actualTier": "trivial",
+      "actualTier": "simple",
       "expectedType": "content",
       "actualType": "content",
-      "match": false,
+      "match": true,
       "typeMatch": true,
-      "performanceMs": 176.476395
+      "performanceMs": 154.730042
     },
     {
       "id": 13,
       "task": "Debug the memory leak in the Node.js application",
       "expectedTier": "moderate",
-      "actualTier": "trivial",
+      "actualTier": "moderate",
       "expectedType": "debugging",
       "actualType": "debugging",
-      "match": false,
+      "match": true,
       "typeMatch": true,
-      "performanceMs": 145.831929
+      "performanceMs": 148.278565
     },
     {
       "id": 14,
       "task": "Refactor the codebase to use TypeScript instead of JavaScript",
       "expectedTier": "complex",
-      "actualTier": "trivial",
+      "actualTier": "complex",
       "expectedType": "coding",
       "actualType": "coding",
-      "match": false,
+      "match": true,
       "typeMatch": true,
-      "performanceMs": 138.75569
+      "performanceMs": 155.804269
     },
     {
       "id": 15,
       "task": "Create a proof-of-concept for the new search feature",
       "expectedTier": "simple",
-      "actualTier": "trivial",
+      "actualTier": "simple",
       "expectedType": "coding",
       "actualType": "coding",
-      "match": false,
+      "match": true,
       "typeMatch": true,
-      "performanceMs": 135.620995
+      "performanceMs": 158.65157
     },
     {
       "id": 16,
       "task": "Implement real-time WebSocket chat with message persistence, user presence, typing indicators, and read receipts",
       "expectedTier": "complex",
-      "actualTier": "simple",
+      "actualTier": "complex",
       "expectedType": "coding",
       "actualType": "coding",
-      "match": false,
+      "match": true,
       "typeMatch": true,
-      "performanceMs": 137.423702
+      "performanceMs": 167.827629
     },
     {
       "id": 17,
       "task": "Document the API endpoints in the README",
       "expectedTier": "trivial",
-      "actualTier": "trivial",
+      "actualTier": "simple",
       "expectedType": "documentation",
       "actualType": "documentation",
-      "match": true,
+      "match": false,
       "typeMatch": true,
-      "performanceMs": 139.3046
+      "performanceMs": 168.562546
     },
     {
       "id": 18,
       "task": "Analyze last month's user engagement metrics and create a comprehensive report with visualizations and actionable insights",
       "expectedTier": "moderate",
-      "actualTier": "simple",
+      "actualTier": "moderate",
       "expectedType": "analysis",
       "actualType": "analysis",
-      "match": false,
+      "match": true,
       "typeMatch": true,
-      "performanceMs": 134.451464
+      "performanceMs": 180.815618
     },
     {
       "id": 19,
@@ -240,76 +240,351 @@
       "expectedTier": "simple",
       "actualTier": "trivial",
       "expectedType": "coding",
-      "actualType": "general",
+      "actualType": "review",
       "match": false,
       "typeMatch": false,
-      "performanceMs": 131.362107
+      "performanceMs": 167.465953
     },
     {
       "id": 20,
       "task": "Build production-ready e-commerce platform with payment integration, inventory management, order processing, admin dashboard, and email notifications",
       "expectedTier": "complex",
-      "actualTier": "moderate",
+      "actualTier": "complex",
       "expectedType": "coding",
       "actualType": "coding",
-      "match": false,
+      "match": true,
       "typeMatch": true,
-      "performanceMs": 132.812931
+      "performanceMs": 181.294212
     },
     {
       "id": 21,
       "task": "Review and compare three different database solutions for our use case",
       "expectedTier": "moderate",
-      "actualTier": "trivial",
+      "actualTier": "moderate",
       "expectedType": "analysis",
-      "actualType": "analysis",
-      "match": false,
-      "typeMatch": true,
-      "performanceMs": 136.309299
+      "actualType": "review",
+      "match": true,
+      "typeMatch": false,
+      "performanceMs": 178.506941
     },
     {
       "id": 22,
       "task": "Fix typo in the documentation",
-      "expectedTier": "trivial",
+      "expectedTier": "simple",
       "actualTier": "trivial",
       "expectedType": "documentation",
-      "actualType": "debugging",
-      "match": true,
-      "typeMatch": false,
-      "performanceMs": 132.433739
+      "actualType": "documentation",
+      "match": false,
+      "typeMatch": true,
+      "performanceMs": 168.031987
     },
     {
       "id": 23,
       "task": "Implement GDPR compliance checks across all data processing workflows",
       "expectedTier": "complex",
-      "actualTier": "trivial",
+      "actualTier": "complex",
       "expectedType": "security",
       "actualType": "security",
-      "match": false,
+      "match": true,
       "typeMatch": true,
-      "performanceMs": 143.963623
+      "performanceMs": 190.700745
     },
     {
       "id": 24,
       "task": "Create a simple landing page with contact form",
       "expectedTier": "simple",
-      "actualTier": "trivial",
+      "actualTier": "simple",
       "expectedType": "coding",
       "actualType": "coding",
-      "match": false,
+      "match": true,
       "typeMatch": true,
-      "performanceMs": 127.624958
+      "performanceMs": 185.015688
     },
     {
       "id": 25,
       "task": "Architect and implement a distributed caching layer with Redis cluster, cache invalidation strategies, and monitoring. Make it production-ready.",
       "expectedTier": "complex",
-      "actualTier": "moderate",
+      "actualTier": "complex",
       "expectedType": "coding",
       "actualType": "planning",
+      "match": true,
+      "typeMatch": false,
+      "performanceMs": 178.154561
+    },
+    {
+      "id": 26,
+      "task": "Add a border radius to the submit button in the CSS",
+      "expectedTier": "trivial",
+      "actualTier": "trivial",
+      "expectedType": "coding",
+      "actualType": "coding",
+      "match": true,
+      "typeMatch": true,
+      "performanceMs": 148.285559
+    },
+    {
+      "id": 27,
+      "task": "Fix the spacing on the homepage header",
+      "expectedTier": "moderate",
+      "actualTier": "moderate",
+      "expectedType": "review",
+      "actualType": "devops",
+      "match": true,
+      "typeMatch": false,
+      "performanceMs": 170.002884
+    },
+    {
+      "id": 28,
+      "task": "Update the error message text on the login form",
+      "expectedTier": "simple",
+      "actualTier": "simple",
+      "expectedType": "documentation",
+      "actualType": "debugging",
+      "match": true,
+      "typeMatch": false,
+      "performanceMs": 154.776682
+    },
+    {
+      "id": 29,
+      "task": "Add input validation to the contact form email field",
+      "expectedTier": "simple",
+      "actualTier": "simple",
+      "expectedType": "coding",
+      "actualType": "coding",
+      "match": true,
+      "typeMatch": true,
+      "performanceMs": 190.48988
+    },
+    {
+      "id": 30,
+      "task": "Refactor the authentication utility functions into a separate module",
+      "expectedTier": "simple",
+      "actualTier": "simple",
+      "expectedType": "coding",
+      "actualType": "coding",
+      "match": true,
+      "typeMatch": true,
+      "performanceMs": 159.310152
+    },
+    {
+      "id": 31,
+      "task": "Design the REST API endpoints and data models for the new mobile app",
+      "expectedTier": "moderate",
+      "actualTier": "moderate",
+      "expectedType": "planning",
+      "actualType": "planning",
+      "match": true,
+      "typeMatch": true,
+      "performanceMs": 182.345605
+    },
+    {
+      "id": 32,
+      "task": "Fix the SQL injection vulnerability in the user search endpoint",
+      "expectedTier": "moderate",
+      "actualTier": "moderate",
+      "expectedType": "security",
+      "actualType": "security",
+      "match": true,
+      "typeMatch": true,
+      "performanceMs": 175.865087
+    },
+    {
+      "id": 33,
+      "task": "Update all npm packages to their latest minor versions and verify nothing breaks",
+      "expectedTier": "trivial",
+      "actualTier": "simple",
+      "expectedType": "security",
+      "actualType": "general",
       "match": false,
       "typeMatch": false,
-      "performanceMs": 128.182853
+      "performanceMs": 149.992687
+    },
+    {
+      "id": 34,
+      "task": "Add pagination to the product listing endpoint with cursor-based navigation",
+      "expectedTier": "moderate",
+      "actualTier": "simple",
+      "expectedType": "coding",
+      "actualType": "coding",
+      "match": false,
+      "typeMatch": true,
+      "performanceMs": 150.66559
+    },
+    {
+      "id": 35,
+      "task": "Plan the database schema migration for adding multi-tenancy support",
+      "expectedTier": "moderate",
+      "actualTier": "moderate",
+      "expectedType": "planning",
+      "actualType": "planning",
+      "match": true,
+      "typeMatch": true,
+      "performanceMs": 179.917753
+    },
+    {
+      "id": 36,
+      "task": "Investigate and fix the race condition in the concurrent checkout flow",
+      "expectedTier": "complex",
+      "actualTier": "complex",
+      "expectedType": "debugging",
+      "actualType": "debugging",
+      "match": true,
+      "typeMatch": true,
+      "performanceMs": 155.2085
+    },
+    {
+      "id": 37,
+      "task": "Scan a single npm dependency for known vulnerabilities",
+      "expectedTier": "simple",
+      "actualTier": "simple",
+      "expectedType": "security",
+      "actualType": "security",
+      "match": true,
+      "typeMatch": true,
+      "performanceMs": 146.841752
+    },
+    {
+      "id": 38,
+      "task": "Implement SOC2 compliance controls across the entire engineering organization including access management, audit logging, and data retention policies",
+      "expectedTier": "complex",
+      "actualTier": "complex",
+      "expectedType": "security",
+      "actualType": "analysis",
+      "match": true,
+      "typeMatch": false,
+      "performanceMs": 190.818705
+    },
+    {
+      "id": 39,
+      "task": "Audit the full dependency tree and generate an SBOM with vulnerability prioritization",
+      "expectedTier": "moderate",
+      "actualTier": "moderate",
+      "expectedType": "security",
+      "actualType": "analysis",
+      "match": true,
+      "typeMatch": false,
+      "performanceMs": 152.527157
+    },
+    {
+      "id": 40,
+      "task": "Analyze sales data from the last quarter and create a visualization dashboard in Excel",
+      "expectedTier": "moderate",
+      "actualTier": "moderate",
+      "expectedType": "analysis",
+      "actualType": "analysis",
+      "match": true,
+      "typeMatch": true,
+      "performanceMs": 153.896431
+    },
+    {
+      "id": 41,
+      "task": "Build a recommendation engine that suggests products based on user browsing history and purchase patterns",
+      "expectedTier": "simple",
+      "actualTier": "simple",
+      "expectedType": "data_science",
+      "actualType": "coding",
+      "match": true,
+      "typeMatch": false,
+      "performanceMs": 196.499992
+    },
+    {
+      "id": 42,
+      "task": "Write a Python script to clean and transform customer export CSV data for import",
+      "expectedTier": "simple",
+      "actualTier": "simple",
+      "expectedType": "data_science",
+      "actualType": "coding",
+      "match": true,
+      "typeMatch": false,
+      "performanceMs": 151.537434
+    },
+    {
+      "id": 43,
+      "task": "Design a CI/CD pipeline with automated testing, staging deployment, and production rollout with rollback capability",
+      "expectedTier": "complex",
+      "actualTier": "complex",
+      "expectedType": "devops",
+      "actualType": "devops",
+      "match": true,
+      "typeMatch": true,
+      "performanceMs": 152.371295
+    },
+    {
+      "id": 44,
+      "task": "Set up monitoring dashboards with latency, error rate, and business metric alerts",
+      "expectedTier": "moderate",
+      "actualTier": "simple",
+      "expectedType": "devops",
+      "actualType": "debugging",
+      "match": false,
+      "typeMatch": false,
+      "performanceMs": 153.761004
+    },
+    {
+      "id": 45,
+      "task": "Implement feature flags using a third-party service and integrate with the frontend and backend",
+      "expectedTier": "simple",
+      "actualTier": "moderate",
+      "expectedType": "general",
+      "actualType": "coding",
+      "match": false,
+      "typeMatch": false,
+      "performanceMs": 162.571416
+    },
+    {
+      "id": 46,
+      "task": "Run a simple A/B test on the landing page CTA button color",
+      "expectedTier": "simple",
+      "actualTier": "simple",
+      "expectedType": "analysis",
+      "actualType": "general",
+      "match": true,
+      "typeMatch": false,
+      "performanceMs": 153.634968
+    },
+    {
+      "id": 47,
+      "task": "Configure feature branches, merge strategies, and branch protection rules in GitHub",
+      "expectedTier": "simple",
+      "actualTier": "simple",
+      "expectedType": "devops",
+      "actualType": "review",
+      "match": true,
+      "typeMatch": false,
+      "performanceMs": 154.535031
+    },
+    {
+      "id": 48,
+      "task": "Create a runbook for the on-call engineer covering common production incident scenarios",
+      "expectedTier": "simple",
+      "actualTier": "simple",
+      "expectedType": "documentation",
+      "actualType": "coding",
+      "match": true,
+      "typeMatch": false,
+      "performanceMs": 154.530533
+    },
+    {
+      "id": 49,
+      "task": "Benchmark query performance after adding database indexes and document the before/after results",
+      "expectedTier": "simple",
+      "actualTier": "moderate",
+      "expectedType": "analysis",
+      "actualType": "analysis",
+      "match": false,
+      "typeMatch": true,
+      "performanceMs": 152.051736
+    },
+    {
+      "id": 50,
+      "task": "Monitor the deployed ML model in production and set up automated retraining triggers based on data drift detection",
+      "expectedTier": "complex",
+      "actualTier": "complex",
+      "expectedType": "data_science",
+      "actualType": "data_science",
+      "match": true,
+      "typeMatch": true,
+      "performanceMs": 158.876347
     }
   ]
 }

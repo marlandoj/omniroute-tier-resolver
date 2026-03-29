@@ -1,15 +1,19 @@
 {
   "version": 1,
-  "lastUpdated": 1773893281167,
+  "lastUpdated": 1774792723011,
   "feedbackCount": 0,
   "weights": {
-    "wordCount": 0.14,
-    "fileRefs": 0.14,
-    "multiStep": 0.14,
-    "toolUsage": 0.14,
-    "analysisDepth": 0.14,
-    "domainComplexity": 0.15,
-    "techStackDepth": 0.15
+    "wordCount": 0.04,
+    "fileRefs": 0.02,
+    "multiStep": 0.1,
+    "toolUsage": 0.04,
+    "analysisDepth": 0.08,
+    "domainComplexity": 0.1,
+    "techStackDepth": 0.1,
+    "conceptCount": 0.2,
+    "taskVerbComplexity": 0.1,
+    "scopeBreadth": 0.12,
+    "featureListCount": 0.2
   },
   "performance": {
     "precision": {
