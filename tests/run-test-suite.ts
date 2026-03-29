@@ -7,7 +7,7 @@ const scriptFlag = process.argv.indexOf("--script");
 const customScript = scriptFlag !== -1 ? process.argv[scriptFlag + 1] : null;
 const SCRIPT_PATH = customScript 
   ? resolve(import.meta.dir, "..", customScript)
-  : resolve(import.meta.dir, "../scripts/tier-resolve.ts");
+  : resolve(import.meta.dir, "..", "scripts", "tier-resolve-v2.ts");
 
 const TEST_SUITE = resolve(import.meta.dir, "test-suite.jsonl");
 
